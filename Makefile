@@ -5,7 +5,7 @@
         dev dev-up dev-up-build dev-shell \
         build docker-build tar load-prod-image run-prod \
         morgans morgans-build morgans-clean logs down shell \
-        render-template test-send
+        render-template test-send status
 
 ## 🆘 AIDE & INSTALLATION
 
@@ -35,6 +35,7 @@ help:
 	@echo "🎨 render-template     Render un template email .tsx → .html"
 	@echo "                       Utilisation : make render-template name=Welcome"
 	@echo "✉️  test-send          Envoie un e-mail de test en appelant GraphQL"
+	@echo "🔎 status              Affiche l’état des conteneurs, réseaux, images"
 	@echo ""
 
 install:
@@ -97,6 +98,19 @@ down:
 
 shell:
 	docker compose exec morgans /bin/bash
+
+status:
+	@echo "📦 Conteneurs actifs :"
+	@docker ps --filter name=morgans --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+	@echo ""
+	@echo "🔗 Réseaux Docker liés :"
+	@docker network inspect interservices --format '{{range .Containers}}{{.Name}}{{"\t"}}{{.IPv4Address}}{{"\n"}}{{end}}' || echo "❌ Réseau 'interservices' non trouvé"
+
+	@echo ""
+	@echo "🧊 Images locales Morgans :"
+	@docker images morgans --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+
 
 ## 🧪 TEST & OUTILS
 

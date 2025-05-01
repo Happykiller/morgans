@@ -14,7 +14,27 @@ import * as React from 'react';
 export const WelcomeEmail = () => {
   return (
     <Html>
-      <Head />
+      <Head>
+        <style>
+          {`
+      @media only screen and (max-width: 600px) {
+        .container {
+          padding: 1rem !important;
+          width: 100% !important;
+        }
+
+        .button {
+          width: 100% !important;
+          font-size: 0.9rem !important;
+        }
+
+        .text-center {
+          text-align: center !important;
+        }
+      }
+    `}
+        </style>
+      </Head>
       <Body
         style={{
           background: '#0F0F2B',
@@ -25,17 +45,21 @@ export const WelcomeEmail = () => {
         }}
       >
         <Container
+          className="container"
           style={{
+            width: '100%',
+            maxWidth: '600px',
             backgroundColor: '#0F0F2B',
             borderRadius: '16px',
             padding: '2rem',
             margin: '0 auto',
-            maxWidth: '480px',
             boxShadow: `
-              0 0 24px rgba(66, 133, 244, 0.2),
-              0 0 64px rgba(66, 133, 244, 0.1),
-              inset 0 0 8px rgba(255, 255, 255, 0.02)
-            `,
+            0 0 32px rgba(66, 133, 244, 0.25),
+            0 0 72px rgba(66, 133, 244, 0.12),
+            inset 0 0 12px rgba(255, 255, 255, 0.08),
+            inset 0 0 24px rgba(255, 255, 255, 0.06)
+          `,
+            boxSizing: 'border-box',
           }}
         >
           <Section style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -79,6 +103,7 @@ export const WelcomeEmail = () => {
           <Section style={{ marginTop: '2rem', marginBottom: '2rem', textAlign: 'center' }}>
             <div style={{ marginBottom: '1rem' }}>
               <Button
+                className="button"
                 href="{{serviceUrl}}"
                 style={{
                   backgroundColor: '#4169E1',
@@ -100,6 +125,7 @@ export const WelcomeEmail = () => {
             </div>
             <div>
               <Button
+                className="button"
                 href="{{siguriUrl}}"
                 style={{
                   backgroundColor: 'transparent',

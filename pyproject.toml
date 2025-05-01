@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "morgans"
+version = "0.1.0"
+description = "Service GraphQL d'envoi d'e-mails"
+authors = ["Fabrice"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.110"
+strawberry-graphql = "^0.211.1"
+aiosmtplib = "^3.0.1"
+pydantic = "^2.7"
+python-dotenv = "^1.0.1"
+pydantic-settings = "^2.2.1"
+jinja2 = "^3.1.3"
+
+[tool.poetry.group.dev.dependencies]
+uvicorn = "^0.29"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

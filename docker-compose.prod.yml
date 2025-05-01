@@ -1,0 +1,14 @@
+# docker-compose.yml
+services:
+  morgans:
+    image: morgans
+    container_name: morgans
+    ports:
+      - '8080:8080'
+    restart: always
+    networks:
+      - interservices
+
+networks:
+  interservices:
+    external: true

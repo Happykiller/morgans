@@ -1,0 +1,22 @@
+# docker-compose.yml
+services:
+  morgans:
+    build: .
+    container_name: morgans
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+
+  morgans-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: morgans-dev
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

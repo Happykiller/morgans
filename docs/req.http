@@ -1,0 +1,48 @@
+### ping
+POST http://localhost:8000/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+  ping
+}
+
+### sendMail
+POST http://localhost:8000/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMail($input: MailInput!) { sendMail(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "fabrice.rosito@gmail.com",
+      "subject": "Test avec variables",
+      "body": "<p>Message envoyé via GraphQL avec variables 💡</p>",
+      "html": true
+    }
+  }
+}
+
+### sendMailWithTemplate
+POST http://localhost:8000/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "f.rosito@thomyris.com",
+      "subject": "Bienvenue sur Vergo 🎉",
+      "template": "welcome.html",
+      "variables": {
+        "id": "Fabrice",
+        "email": "fabrice.rosito@gmail.com",
+        "password": "super-secret",
+        "logoUrl": "https://vergo.happykiller.net/assets/apple-touch-icon-180x180.png",
+        "serviceUrl": "https://vergo.happykiller.net/",
+        "serviceName": "Vergo",
+        "siguriUrl": "https://siguri.happykiller.net/"
+      }
+    }
+  }
+}

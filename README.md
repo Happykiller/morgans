@@ -63,7 +63,7 @@ Then launch:
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
-Access GraphQL API: [http://<your-server>:8080/graphql](http://<your-server>:8080/graphql)
+Access GraphQL API: [http://<your-server>:8025/graphql](http://<your-server>:8025/graphql)
 
 ## API Usage
 

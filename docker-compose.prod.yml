@@ -1,11 +1,13 @@
-# docker-compose.yml
+# docker-compose.prod.yml
 services:
   morgans:
     image: morgans
     container_name: morgans
     ports:
-      - '8080:8080'
+      - '8025:8000'
     restart: always
+    env_file:
+      - .env
     networks:
       - interservices
 

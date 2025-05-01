@@ -31,7 +31,7 @@ Content-Type: application/json
   "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
   "variables": {
     "input": {
-      "to": "f.rosito@thomyris.com",
+      "to": "fabrice.rosito@gmail.com",
       "subject": "Bienvenue sur Vergo 🎉",
       "template": "welcome.html",
       "variables": {
@@ -43,6 +43,22 @@ Content-Type: application/json
         "serviceName": "Vergo",
         "siguriUrl": "https://siguri.happykiller.net/"
       }
+    }
+  }
+}
+
+### sendMailWithTemplate
+POST http://localhost:8000/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "f.rosito@thomyris.com",
+      "subject": "Bienvenue sur Vergo 🎉",
+      "template": "test.html",
+      "variables": {}
     }
   }
 }

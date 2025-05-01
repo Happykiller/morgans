@@ -10,3 +10,5 @@ poetry.lock
 .vscode/
 .idea/
 tests/
+*.tar
+docs/

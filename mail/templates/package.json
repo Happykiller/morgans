@@ -14,10 +14,12 @@
     "@react-email/render": "^1.0.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-email": "^4.0.7"
+    "react-email": "^4.0.7",
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
+    "@types/react": "^19.1.2",
     "tsx": "^4.19.4"
   }
 }

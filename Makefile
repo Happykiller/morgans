@@ -1,49 +1,67 @@
+# Makefile
 .DEFAULT_GOAL := help
 
-.PHONY: help install dev up down logs shell test docker-build docker-run docker-clean tar load-prod-image dev-docker dev-shell render-template
+.PHONY: help install \
+        dev dev-up dev-up-build dev-shell \
+        build docker-build tar load-prod-image run-prod \
+        morgans morgans-build morgans-clean logs down shell \
+        render-template test-send
+
+## 🆘 AIDE & INSTALLATION
 
 help:
 	@echo ""
-	@echo "📌 Available Makefile commands:"
+	@echo "📌 Makefile — commandes disponibles :"
 	@echo ""
-	@echo "🔧 install           Install Python dependencies using Poetry"
-	@echo "🚀 dev               Run the FastAPI app locally with auto-reload"
-	@echo "🐳 up                Build and start Docker containers in background"
-	@echo "🛑 down              Stop and remove running Docker containers"
-	@echo "📜 logs              Tail logs from all Docker containers"
-	@echo "🖥️  shell             Open an interactive shell inside the 'morgans' container"
-	@echo "📦 docker-build      Build the Docker image from Dockerfile"
-	@echo "📦 tar               Build the Docker image and save it as a .tar file"
-	@echo "📥 load-prod-image   Load the .tar Docker image and run it in prod mode"
-	@echo "🐋 run-prod          Run the container locally with .env environment"
-	@echo "🧹 docker-clean      Remove the local 'morgans' Docker image"
-	@echo "🔁 dev-docker        Start the dev container with mounted volume and hot reload"
-	@echo "💻 dev-shell         Open an interactive shell in the dev container"
-	@echo "🧩 render-template   Render a mail template via TSX (name=...)"
+	@echo "🔧 install             Installer les dépendances Python avec Poetry"
+	@echo "🚀 dev                 Lancer FastAPI en local (host direct)"
+	@echo ""
+	@echo "🧪 dev-up              Lancer le conteneur morgans-dev (volume + hot reload)"
+	@echo "🔁 dev-up-build        Rebuild + up du conteneur morgans-dev"
+	@echo "💻 dev-shell           Shell dans le conteneur dev"
+	@echo ""
+	@echo "🐳 morgans             Démarrer le conteneur prod morgans"
+	@echo "🐳 morgans-build       Build + up de l'image morgans"
+	@echo "🧹 morgans-clean       Supprimer l'image locale"
+	@echo "📜 logs                Logs du conteneur"
+	@echo "🛑 down                Stopper tous les conteneurs"
+	@echo "🖥️  shell              Shell dans le conteneur prod"
+	@echo ""
+	@echo "📦 docker-build        Build de l'image (Dockerfile)"
+	@echo "📦 tar                 Sauvegarder l'image en .tar"
+	@echo "📥 load-prod-image     Charger l'image tar + up en prod"
+	@echo "🏃 run-prod            Lancer localement l’image en standalone"
+	@echo ""
+	@echo "🎨 render-template     Render un template email .tsx → .html"
+	@echo "                       Utilisation : make render-template name=Welcome"
+	@echo "✉️  test-send          Envoie un e-mail de test en appelant GraphQL"
 	@echo ""
 
-# Dépendances Python
 install:
 	poetry install
+
+## 🚀 DÉVELOPPEMENT LOCAL
 
 dev:
 	poetry run uvicorn main:app --reload --port 8000
 
-# Docker
-docker-build:
+dev-up:
+	docker compose up morgans-dev
+
+dev-up-build:
+	docker rm -f morgans-dev || true
+	docker compose up --build morgans-dev
+
+dev-shell:
+	docker compose exec morgans-dev /bin/bash
+
+## 🐳 BUILD / PROD
+
+build:
 	docker build -t morgans -f Dockerfile .
 
-up:
-	docker compose up --build -d
-
-down:
-	docker compose down
-
-logs:
-	docker compose logs -f
-
-shell:
-	docker compose exec morgans /bin/bash
+docker-build:
+	docker build -t morgans -f Dockerfile .
 
 tar:
 	make docker-build
@@ -54,20 +72,33 @@ load-prod-image:
 	docker rm morgans || true
 	docker image rm morgans || true
 	docker load -i morgans.tar
+	docker network inspect interservices >/dev/null 2>&1 || docker network create interservices
 	docker compose -f docker-compose.prod.yml up -d
 
 run-prod:
 	docker run --rm -it -p 8000:8000 --env-file .env morgans
 
-docker-clean:
+## 🐳 CONTENEUR PRODUCTION
+
+morgans:
+	docker compose up -d
+
+morgans-build:
+	docker compose up --build -d
+
+morgans-clean:
 	docker rmi morgans || true
 
-dev-docker:
-	docker rm -f morgans-dev || true
-	docker compose up --build morgans-dev
+logs:
+	docker logs morgans -f
 
-dev-shell:
-	docker compose exec morgans-dev /bin/bash
+down:
+	docker compose down
+
+shell:
+	docker compose exec morgans /bin/bash
+
+## 🧪 TEST & OUTILS
 
 render-template:
 	@if [ -z "$(name)" ]; then \
@@ -76,3 +107,6 @@ render-template:
 	fi
 	@echo "🛠️  Rendering template: $(name).tsx → $(name).html"
 	docker compose exec morgans-dev bash -c "cd mail/templates && npx tsx render.ts $(name)"
+
+test-send:
+	./scripts/test-send.sh

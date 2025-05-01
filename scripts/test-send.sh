@@ -18,7 +18,7 @@ curl -s -X POST http://localhost:8025/graphql \
         "id": "Fabrice",
         "email": "fabrice.rosito@gmail.com",
         "password": "super-secret",
-        "logoUrl": "https://vergo.happykiller.net/assets/apple-touch-icon-180x180.png",
+        "logoUrl": "https://vergo.happykiller.net/favicon-192x192.png",
         "serviceUrl": "https://vergo.happykiller.net/",
         "serviceName": "Vergo",
         "siguriUrl": "https://siguri.happykiller.net/"

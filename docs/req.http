@@ -1,5 +1,5 @@
 ### ping
-POST http://localhost:8000/graphql
+POST http://localhost:8025/graphql
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
@@ -7,8 +7,19 @@ query {
   ping
 }
 
+### system
+POST http://localhost:8025/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+  system {
+    version
+  }
+}
+
 ### sendMail
-POST http://localhost:8000/graphql
+POST http://localhost:8025/graphql
 Content-Type: application/json
 
 {
@@ -24,7 +35,7 @@ Content-Type: application/json
 }
 
 ### sendMailWithTemplate
-POST http://localhost:8000/graphql
+POST http://localhost:8025/graphql
 Content-Type: application/json
 
 {
@@ -38,7 +49,7 @@ Content-Type: application/json
         "id": "Fabrice",
         "email": "fabrice.rosito@gmail.com",
         "password": "super-secret",
-        "logoUrl": "https://vergo.happykiller.net/assets/apple-touch-icon-180x180.png",
+        "logoUrl": "https://vergo.happykiller.net/favicon-192x192.png",
         "serviceUrl": "https://vergo.happykiller.net/",
         "serviceName": "Vergo",
         "siguriUrl": "https://siguri.happykiller.net/"
@@ -48,7 +59,7 @@ Content-Type: application/json
 }
 
 ### sendMailWithTemplate
-POST http://localhost:8000/graphql
+POST http://localhost:8025/graphql
 Content-Type: application/json
 
 {

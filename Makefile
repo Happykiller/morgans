@@ -5,7 +5,7 @@
         dev dev-up dev-up-build dev-shell \
         build docker-build tar load-prod-image run-prod \
         morgans morgans-build morgans-clean logs down shell \
-        render-template test-send status
+        render-template test-send status version
 
 ## 🆘 AIDE & INSTALLATION
 
@@ -33,9 +33,10 @@ help:
 	@echo "🏃 run-prod            Lancer localement l’image en standalone"
 	@echo ""
 	@echo "🎨 render-template     Render un template email .tsx → .html"
-	@echo "                       Utilisation : make render-template name=Welcome"
+	@echo "                        Utilisation : make render-template name=Welcome"
 	@echo "✉️  test-send          Envoie un e-mail de test en appelant GraphQL"
 	@echo "🔎 status              Affiche l’état des conteneurs, réseaux, images"
+	@echo "🔍 version             Affiche la version de l’application via GraphQL"
 	@echo ""
 
 install:
@@ -111,6 +112,8 @@ status:
 	@echo "🧊 Images locales Morgans :"
 	@docker images morgans --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 
+version:
+	./scripts/version.sh
 
 ## 🧪 TEST & OUTILS
 

@@ -8,7 +8,16 @@ curl -s -X POST http://localhost:8025/graphql \
   -H "Content-Type: application/json" \
   -d @- <<EOF
 {
-  "query": "{ system { version } }"
+  "query": "{ 
+    system { 
+      version 
+      smtpHost
+      smtpPort
+      smtpUser
+      mailFrom
+      smtpTls 
+    } 
+  }"
 }
 EOF
 

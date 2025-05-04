@@ -15,6 +15,11 @@ X-REQUEST-TYPE: GraphQL
 query {
   system {
     version
+    smtpHost
+    smtpPort
+    smtpUser
+    mailFrom
+    smtpTls
   }
 }
 

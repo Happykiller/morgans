@@ -3,8 +3,6 @@ services:
   morgans:
     image: morgans
     container_name: morgans
-    ports:
-      - '8025:8000'
     restart: always
     env_file:
       - .env

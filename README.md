@@ -112,6 +112,13 @@ mutation SendMail($input: MailInput!) {
 └── README.md            # Documentation
 ```
 
+## Compile template
+
+```
+cd mail/templates
+npx tsx render.ts Welcome
+```
+
 ## Security Notes
 
 - **Do not expose** this service directly to the Internet without additional protection.

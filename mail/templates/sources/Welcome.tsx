@@ -51,14 +51,14 @@ export const WelcomeEmail = () => {
             marginBottom: '1.5rem',
           }}
         >
-          Bienvenue sur Vergo, {'{{id}}'} !
+          Bienvenue sur {'{{serviceName}}'}, {'{{id}}'} !
         </Heading>
 
         <Text style={{ fontSize: '1rem', lineHeight: 1.6 }}>
           Ton compte est maintenant actif. Tu peux te connecter immédiatement avec les informations suivantes :
         </Text>
 
-        <Text><strong>👤 Identifiant :</strong> {'{{email}}'}</Text>
+        <Text><strong>👤 Identifiant :</strong> {'{{id}}'}</Text>
         <Text><strong>🔑 Mot de passe :</strong> {'{{password}}'}</Text>
         <Text>
           <strong>🌐 Accès au service :</strong>{' '}

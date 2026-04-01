@@ -20,3 +20,4 @@ class MailTemplateInput:
     subject: str
     template: str
     variables: JSON
+    locale: str = "fr"

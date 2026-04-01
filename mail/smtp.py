@@ -1,20 +1,48 @@
-# mail/smtp.py
 import os
+from email.message import EmailMessage
+
 import aiosmtplib
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from config import settings
-from email.message import EmailMessage
+
+
+COMPILED_TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), "templates/compiled/")
 
 template_env = Environment(
-    loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates/compiled/")),
-    autoescape=select_autoescape(["html", "xml"])
+    loader=FileSystemLoader(COMPILED_TEMPLATES_DIR),
+    autoescape=select_autoescape(["html", "xml"]),
 )
 
-async def send_email_with_template(to: str, subject: str, template_name: str, variables: dict):
-    template = template_env.get_template(template_name)
+
+def resolve_template_name(template_name: str, locale: str = "fr") -> str:
+    normalized_locale = (locale or "fr").lower()
+    base_name, ext = os.path.splitext(template_name)
+    localized_template_name = f"{base_name}.{normalized_locale}{ext}"
+
+    if os.path.exists(os.path.join(COMPILED_TEMPLATES_DIR, localized_template_name)):
+        return localized_template_name
+
+    if os.path.exists(os.path.join(COMPILED_TEMPLATES_DIR, template_name)):
+        return template_name
+
+    raise FileNotFoundError(
+        f"Template '{template_name}' not found for locale '{normalized_locale}'."
+    )
+
+
+async def send_email_with_template(
+    to: str,
+    subject: str,
+    template_name: str,
+    variables: dict,
+    locale: str = "fr",
+):
+    resolved_template_name = resolve_template_name(template_name, locale)
+    template = template_env.get_template(resolved_template_name)
     rendered_body = template.render(**variables)
     await send_email(to=to, subject=subject, body=rendered_body, html=True)
+
 
 async def send_email(to: str, subject: str, body: str, html: bool = False):
     if not settings.MAIL_FROM:
@@ -24,7 +52,7 @@ async def send_email(to: str, subject: str, body: str, html: bool = False):
     msg["From"] = settings.MAIL_FROM
     msg["To"] = to
     msg["Subject"] = subject
-    
+
     if html:
         msg.add_alternative(body, subtype="html")
     else:

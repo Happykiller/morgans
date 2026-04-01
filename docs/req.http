@@ -78,3 +78,42 @@ Content-Type: application/json
     }
   }
 }
+
+### sendMailWithTemplate FitDesk Coach
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "thomas.things@gmail.com",
+      "subject": "Bienvenue sur FitDesk, Thomas. 🎉",
+      "template": "fitdeskwelcomecoach.html",
+      "locale": "fr",
+      "variables": {
+        "firstName": "Thomas"
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Athlete
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "thomas.things@gmail.com",
+      "subject": "Bienvenue sur FitDesk, Thomas. 🎉",
+      "template": "fitdeskwelcomeathlete.html",
+      "locale": "fr",
+      "variables": {
+        "firstName": "Thomas"
+      }
+    }
+  }
+}
+

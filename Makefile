@@ -1,6 +1,9 @@
 # Makefile
 .DEFAULT_GOAL := help
 
+COMPOSE_DEV := docker compose
+COMPOSE_PROD := docker compose -f docker-compose.prod.yml
+
 .PHONY: help install \
         dev dev-up dev-up-build dev-shell \
         build docker-build tar load-prod-image run-prod \
@@ -14,14 +17,14 @@ help:
 	@echo "📌 Makefile — commandes disponibles :"
 	@echo ""
 	@echo "🔧 install             Installer les dépendances Python avec Poetry"
-	@echo "🚀 dev                 Lancer FastAPI en local (host direct)"
+	@echo "🚀 dev                 Lancer FastAPI en local avec .env.dev"
 	@echo ""
 	@echo "🧪 dev-up              Lancer le conteneur morgans-dev (volume + hot reload)"
 	@echo "🔁 dev-up-build        Rebuild + up du conteneur morgans-dev"
 	@echo "💻 dev-shell           Shell dans le conteneur dev"
 	@echo ""
-	@echo "🐳 morgans             Démarrer le conteneur prod morgans"
-	@echo "🐳 morgans-build       Build + up de l'image morgans"
+	@echo "🐳 morgans             Démarrer la stack prod (docker-compose.prod.yml)"
+	@echo "🐳 morgans-build       Recréer et démarrer la stack prod"
 	@echo "🧹 morgans-clean       Supprimer l'image locale"
 	@echo "📜 logs                Logs du conteneur"
 	@echo "🛑 down                Stopper tous les conteneurs"
@@ -45,17 +48,17 @@ install:
 ## 🚀 DÉVELOPPEMENT LOCAL
 
 dev:
-	poetry run uvicorn main:app --reload --port 8000
+	set -a; . ./.env.dev; set +a; poetry run uvicorn main:app --reload --port 8000
 
 dev-up:
-	docker compose up morgans-dev
+	$(COMPOSE_DEV) up morgans-dev
 
 dev-up-build:
 	docker rm -f morgans-dev || true
-	docker compose up --build morgans-dev
+	$(COMPOSE_DEV) up --build morgans-dev
 
 dev-shell:
-	docker compose exec morgans-dev /bin/bash
+	$(COMPOSE_DEV) exec morgans-dev /bin/bash
 
 ## 🐳 BUILD / PROD
 
@@ -75,7 +78,7 @@ load-prod-image:
 	docker image rm morgans || true
 	docker load -i morgans.tar
 	docker network inspect interservices >/dev/null 2>&1 || docker network create interservices
-	docker compose -f docker-compose.prod.yml up -d
+	$(COMPOSE_PROD) up -d
 
 run-prod:
 	docker run --rm -it -p 8000:8000 --env-file .env morgans
@@ -83,10 +86,10 @@ run-prod:
 ## 🐳 CONTENEUR PRODUCTION
 
 morgans:
-	docker compose up -d
+	$(COMPOSE_PROD) up -d
 
 morgans-build:
-	docker compose up --build -d
+	$(COMPOSE_PROD) up --build -d
 
 morgans-clean:
 	docker rmi morgans || true
@@ -95,7 +98,7 @@ logs:
 	docker logs morgans -f
 
 down:
-	docker compose down
+	$(COMPOSE_DEV) down
 
 shell:
 	docker compose exec morgans /bin/bash

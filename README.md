@@ -178,6 +178,10 @@ Sources React/TSX: `mail/templates/sources`
 
 Templates compilés HTML: `mail/templates/compiled`
 
+Template mot de passe oublié disponible:
+
+- `FitdeskForgotPassword` (inputs attendus dans les variables de rendu: `email`, `resetPasswordUrl`).
+
 Compilation manuelle d'un template:
 
 ```bash

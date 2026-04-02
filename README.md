@@ -25,8 +25,8 @@ L'architecture actuelle est simple et pragmatique:
 - **Query `ping`** pour health-check rapide.
 - **Query `system`** pour exposer la configuration SMTP active (hors mot de passe), ainsi que la version lue depuis `VERSION`.
 - **Mutation `sendMail`** pour l'envoi standard.
-- **Mutation `sendMailWithTemplate`** pour l'envoi basé sur template compilé + variables JSON + locale.
-- **Fallback de templates localisés**: recherche `template.<locale>.html` puis `template.html`.
+- **Mutation `sendMailWithTemplate`** pour l'envoi basé sur template compilé + variables JSON.
+- **Responsabilité i18n côté client**: le client choisit directement le fichier template localisé (ex: `welcome.fr.html`).
 
 ### Qualité actuelle (synthèse)
 
@@ -147,11 +147,10 @@ Variables:
   "input": {
     "to": "recipient@example.com",
     "subject": "Welcome",
-    "template": "welcome.html",
+    "template": "welcome.fr.html",
     "variables": {
       "firstName": "Alex"
-    },
-    "locale": "fr"
+    }
   }
 }
 ```

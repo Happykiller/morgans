@@ -15,20 +15,12 @@ template_env = Environment(
 )
 
 
-def resolve_template_name(template_name: str, locale: str = "fr") -> str:
-    normalized_locale = (locale or "fr").lower()
-    base_name, ext = os.path.splitext(template_name)
-    localized_template_name = f"{base_name}.{normalized_locale}{ext}"
-
-    if os.path.exists(os.path.join(COMPILED_TEMPLATES_DIR, localized_template_name)):
-        return localized_template_name
-
+def resolve_template_name(template_name: str) -> str:
+    """Return template name when the file exists in compiled templates."""
     if os.path.exists(os.path.join(COMPILED_TEMPLATES_DIR, template_name)):
         return template_name
 
-    raise FileNotFoundError(
-        f"Template '{template_name}' not found for locale '{normalized_locale}'."
-    )
+    raise FileNotFoundError(f"Template '{template_name}' not found.")
 
 
 async def send_email_with_template(
@@ -36,9 +28,8 @@ async def send_email_with_template(
     subject: str,
     template_name: str,
     variables: dict,
-    locale: str = "fr",
 ):
-    resolved_template_name = resolve_template_name(template_name, locale)
+    resolved_template_name = resolve_template_name(template_name)
     template = template_env.get_template(resolved_template_name)
     rendered_body = template.render(**variables)
     await send_email(to=to, subject=subject, body=rendered_body, html=True)

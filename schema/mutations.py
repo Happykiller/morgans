@@ -28,7 +28,6 @@ class Mutation:
                 subject=input.subject,
                 template_name=input.template,
                 variables=input.variables,
-                locale=input.locale,
             )
             return MailResponse(success=True, message="Email sent with template")
         except Exception as e:

@@ -9,6 +9,8 @@ import {
   Section,
   Text,
 } from '@react-email/components';
+import copyEn from './FitdeskForgotPassword.en.json';
+import copyFr from './FitdeskForgotPassword.fr.json';
 
 type SupportedLocale = 'fr' | 'en';
 
@@ -29,52 +31,23 @@ const colors = {
 const email = '{{ email }}';
 const resetPasswordUrl = '{{ resetPasswordUrl }}';
 
-const copyByLocale: Record<
-  SupportedLocale,
-  {
-    preview: string;
-    badge: string;
-    headingPrefix: string;
-    headingAccent: string;
-    intro: string;
-    emailLabel: string;
-    actionLabel: string;
-    cta: string;
-    securityNote: string;
-    signatureName: string;
-    signatureRole: string;
-  }
-> = {
-  fr: {
-    preview: 'Réinitialise ton mot de passe FitDesk.',
-    badge: 'Mot de passe oublié',
-    headingPrefix: 'RÉINITIALISE',
-    headingAccent: 'TON ACCÈS',
-    intro:
-      "Une demande de réinitialisation de mot de passe a été reçue pour ton compte FitDesk. Clique sur le bouton ci-dessous pour choisir un nouveau mot de passe.",
-    emailLabel: 'Compte concerné',
-    actionLabel: 'Lien de réinitialisation',
-    cta: 'RÉINITIALISER MON MOT DE PASSE',
-    securityNote:
-      "Si tu n'es pas à l'origine de cette demande, tu peux ignorer cet e-mail en toute sécurité.",
-    signatureName: 'Alexandre',
-    signatureRole: 'Fondateur · FitDesk',
-  },
-  en: {
-    preview: 'Reset your FitDesk password.',
-    badge: 'Forgot password',
-    headingPrefix: 'RESET',
-    headingAccent: 'YOUR ACCESS',
-    intro:
-      'A password reset request was received for your FitDesk account. Click the button below to choose a new password.',
-    emailLabel: 'Account email',
-    actionLabel: 'Reset link',
-    cta: 'RESET MY PASSWORD',
-    securityNote:
-      "If you did not request this reset, you can safely ignore this email.",
-    signatureName: 'Alexandre',
-    signatureRole: 'Founder · FitDesk',
-  },
+interface ForgotPasswordCopy {
+  preview: string;
+  badge: string;
+  headingPrefix: string;
+  headingAccent: string;
+  intro: string;
+  emailLabel: string;
+  actionLabel: string;
+  cta: string;
+  securityNote: string;
+  signatureName: string;
+  signatureRole: string;
+}
+
+const copyByLocale: Record<SupportedLocale, ForgotPasswordCopy> = {
+  fr: copyFr,
+  en: copyEn,
 };
 
 export default function FitdeskForgotPassword({

@@ -181,6 +181,9 @@ Templates compilés HTML: `mail/templates/compiled`
 Template mot de passe oublié disponible:
 
 - `FitdeskForgotPassword` (inputs attendus dans les variables de rendu: `email`, `resetPasswordUrl`).
+- Traductions externalisées en JSON:
+  - `mail/templates/sources/FitdeskForgotPassword.fr.json`
+  - `mail/templates/sources/FitdeskForgotPassword.en.json`
 
 Compilation manuelle d'un template:
 

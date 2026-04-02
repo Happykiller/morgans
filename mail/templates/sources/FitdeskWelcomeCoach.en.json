@@ -1,0 +1,34 @@
+{
+  "preview": "Welcome aboard, {{ firstName }}.",
+  "badge": "Your workspace is ready",
+  "headingPrefix": "WELCOME",
+  "headingAccent": "ABOARD",
+  "intro": "FitDesk is your day-to-day tool, not just another app to learn. Here's what matters to get started.",
+  "stepsLabel": "First steps",
+  "cta": "ACCESS MY SPACE",
+  "outro": "If you need help, use the Help / Messages section from your FitDesk space to contact us.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Founder · FitDesk",
+  "steps": [
+    {
+      "number": "1",
+      "title": "Set up your coach profile",
+      "description": "Lay the groundwork for your business by completing your profile and company information."
+    },
+    {
+      "number": "2",
+      "title": "Manage your leads",
+      "description": "Create and track your leads step by step until they become athletes."
+    },
+    {
+      "number": "3",
+      "title": "Create your first program",
+      "description": "Build a session and assign it in just a couple of clicks."
+    },
+    {
+      "number": "4",
+      "title": "Track your athletes",
+      "description": "Use detailed reports to monitor their progress in real time."
+    }
+  ]
+}

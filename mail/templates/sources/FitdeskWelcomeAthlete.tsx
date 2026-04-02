@@ -10,6 +10,8 @@ import {
   Section,
   Text,
 } from '@react-email/components';
+import copyEn from './FitdeskWelcomeAthlete.en.json';
+import copyFr from './FitdeskWelcomeAthlete.fr.json';
 
 type SupportedLocale = 'fr' | 'en';
 
@@ -30,59 +32,22 @@ const colors = {
 
 const firstName = '{{ firstName }}';
 
-const copyByLocale: Record<
-  SupportedLocale,
-  {
-    preview: string;
-    badge: string;
-    headingPrefix: string;
-    headingAccent: string;
-    intro: string;
-    features: string[];
-    cta: string;
-    outro: string;
-    signatureName: string;
-    signatureRole: string;
-  }
-> = {
-  fr: {
-    preview: `Ton espace athlète est activé, ${firstName}.`,
-    badge: 'Ton espace athlète est activé',
-    headingPrefix: 'PRÊT À',
-    headingAccent: 'PERFORMER',
-    intro:
-      'Ton espace FitDesk est prêt. Retrouve au même endroit tes programmes personnalisés, le suivi de ta progression, ton rapport bien-être et ton plan nutritionnel pour avancer avec un cadre clair, séance après séance.',
-    features: [
-      'Programmes perso',
-      'Suivi de progression',
-      'Rapport bien-être',
-      'Plan nutritionnel',
-    ],
-    cta: 'ACCÉDER À MON ESPACE',
-    outro:
-      "Si tu as la moindre question, utilise la section Aide / Messages depuis ton espace FitDesk pour nous écrire.",
-    signatureName: 'Alexandre',
-    signatureRole: 'Fondateur · FitDesk',
-  },
-  en: {
-    preview: `Your athlete space is ready, ${firstName}.`,
-    badge: 'Your athlete space is ready',
-    headingPrefix: 'READY TO',
-    headingAccent: 'PERFORM',
-    intro:
-      'Your FitDesk space is ready. Find your personalized programs, progress tracking, wellness report, and nutrition plan all in one place to move forward with a clear structure, session after session.',
-    features: [
-      'Custom programs',
-      'Progress tracking',
-      'Wellness report',
-      'Nutrition plan',
-    ],
-    cta: 'ACCESS MY SPACE',
-    outro:
-      'If you need help, use the Help / Messages section from your FitDesk space to contact us.',
-    signatureName: 'Alexandre',
-    signatureRole: 'Founder · FitDesk',
-  },
+interface WelcomeAthleteCopy {
+  preview: string;
+  badge: string;
+  headingPrefix: string;
+  headingAccent: string;
+  intro: string;
+  features: string[];
+  cta: string;
+  outro: string;
+  signatureName: string;
+  signatureRole: string;
+}
+
+const copyByLocale: Record<SupportedLocale, WelcomeAthleteCopy> = {
+  fr: copyFr,
+  en: copyEn,
 };
 
 export default function FitdeskWelcomeAthlete({

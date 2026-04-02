@@ -182,6 +182,10 @@ Template mot de passe oublié disponible:
 
 - `FitdeskForgotPassword` (inputs attendus dans les variables de rendu: `email`, `resetPasswordUrl`).
 - Traductions externalisées en JSON:
+  - `mail/templates/sources/FitdeskWelcomeAthlete.fr.json`
+  - `mail/templates/sources/FitdeskWelcomeAthlete.en.json`
+  - `mail/templates/sources/FitdeskWelcomeCoach.fr.json`
+  - `mail/templates/sources/FitdeskWelcomeCoach.en.json`
   - `mail/templates/sources/FitdeskForgotPassword.fr.json`
   - `mail/templates/sources/FitdeskForgotPassword.en.json`
 

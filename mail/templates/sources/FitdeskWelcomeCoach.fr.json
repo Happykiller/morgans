@@ -1,0 +1,34 @@
+{
+  "preview": "Bienvenue parmi nous, {{ firstName }}.",
+  "badge": "Ton espace est prêt",
+  "headingPrefix": "BIENVENUE",
+  "headingAccent": "PARMI NOUS",
+  "intro": "FitDesk, c'est ton outil du quotidien, pas une appli de plus à apprendre. Voilà l'essentiel pour démarrer.",
+  "stepsLabel": "Les premières étapes",
+  "cta": "ACCÉDER À MON ESPACE",
+  "outro": "Si tu as la moindre question, utilise la section Aide / Messages depuis ton espace FitDesk pour nous écrire.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Fondateur · FitDesk",
+  "steps": [
+    {
+      "number": "1",
+      "title": "Crée ton profil coach",
+      "description": "Pose les bases de ton activité en complétant ton profil et les informations de ton entreprise."
+    },
+    {
+      "number": "2",
+      "title": "Gère tes prospects",
+      "description": "Crée et suis tes prospects étape par étape jusqu'à leur conversion en athlètes."
+    },
+    {
+      "number": "3",
+      "title": "Crée ton premier programme",
+      "description": "Construis une séance et assigne-la en deux clics."
+    },
+    {
+      "number": "4",
+      "title": "Suis tes athlètes",
+      "description": "Grâce à des rapports détaillés, tu peux suivre leur progression en temps réel."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "preview": "Ton espace athlète est activé, {{ firstName }}.",
+  "badge": "Ton espace athlète est activé",
+  "headingPrefix": "PRÊT À",
+  "headingAccent": "PERFORMER",
+  "intro": "Ton espace FitDesk est prêt. Retrouve au même endroit tes programmes personnalisés, le suivi de ta progression, ton rapport bien-être et ton plan nutritionnel pour avancer avec un cadre clair, séance après séance.",
+  "features": [
+    "Programmes perso",
+    "Suivi de progression",
+    "Rapport bien-être",
+    "Plan nutritionnel"
+  ],
+  "cta": "ACCÉDER À MON ESPACE",
+  "outro": "Si tu as la moindre question, utilise la section Aide / Messages depuis ton espace FitDesk pour nous écrire.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Fondateur · FitDesk"
+}

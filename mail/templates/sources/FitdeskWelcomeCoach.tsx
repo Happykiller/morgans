@@ -10,6 +10,8 @@ import {
   Section,
   Text,
 } from '@react-email/components';
+import copyEn from './FitdeskWelcomeCoach.en.json';
+import copyFr from './FitdeskWelcomeCoach.fr.json';
 
 type SupportedLocale = 'fr' | 'en';
 
@@ -30,104 +32,29 @@ const colors = {
 
 const firstName = '{{ firstName }}';
 
-const copyByLocale: Record<
-  SupportedLocale,
-  {
-    preview: string;
-    badge: string;
-    headingPrefix: string;
-    headingAccent: string;
-    intro: string;
-    stepsLabel: string;
-    cta: string;
-    outro: string;
-    signatureName: string;
-    signatureRole: string;
-    steps: Array<{
-      number: string;
-      title: string;
-      description: string;
-    }>;
-  }
-> = {
-  fr: {
-    preview: `Bienvenue parmi nous, ${firstName}.`,
-    badge: 'Ton espace est prêt',
-    headingPrefix: 'BIENVENUE',
-    headingAccent: 'PARMI NOUS',
-    intro:
-      "FitDesk, c'est ton outil du quotidien, pas une appli de plus à apprendre. Voilà l'essentiel pour démarrer.",
-    stepsLabel: 'Les premières étapes',
-    cta: 'ACCÉDER À MON ESPACE',
-    outro:
-      "Si tu as la moindre question, utilise la section Aide / Messages depuis ton espace FitDesk pour nous écrire.",
-    signatureName: 'Alexandre',
-    signatureRole: 'Fondateur · FitDesk',
-    steps: [
-      {
-        number: '1',
-        title: 'Crée ton profil coach',
-        description:
-          'Pose les bases de ton activité en complétant ton profil et les informations de ton entreprise.',
-      },
-      {
-        number: '2',
-        title: 'Gère tes prospects',
-        description:
-          "Crée et suis tes prospects étape par étape jusqu'à leur conversion en athlètes.",
-      },
-      {
-        number: '3',
-        title: 'Crée ton premier programme',
-        description: 'Construis une séance et assigne-la en deux clics.',
-      },
-      {
-        number: '4',
-        title: 'Suis tes athlètes',
-        description:
-          'Grâce à des rapports détaillés, tu peux suivre leur progression en temps réel.',
-      },
-    ],
-  },
-  en: {
-    preview: `Welcome aboard, ${firstName}.`,
-    badge: 'Your workspace is ready',
-    headingPrefix: 'WELCOME',
-    headingAccent: 'ABOARD',
-    intro:
-      "FitDesk is your day-to-day tool, not just another app to learn. Here's what matters to get started.",
-    stepsLabel: 'First steps',
-    cta: 'ACCESS MY SPACE',
-    outro:
-      'If you need help, use the Help / Messages section from your FitDesk space to contact us.',
-    signatureName: 'Alexandre',
-    signatureRole: 'Founder · FitDesk',
-    steps: [
-      {
-        number: '1',
-        title: 'Set up your coach profile',
-        description:
-          'Lay the groundwork for your business by completing your profile and company information.',
-      },
-      {
-        number: '2',
-        title: 'Manage your leads',
-        description:
-          'Create and track your leads step by step until they become athletes.',
-      },
-      {
-        number: '3',
-        title: 'Create your first program',
-        description: 'Build a session and assign it in just a couple of clicks.',
-      },
-      {
-        number: '4',
-        title: 'Track your athletes',
-        description:
-          'Use detailed reports to monitor their progress in real time.',
-      },
-    ],
-  },
+interface WelcomeCoachStep {
+  number: string;
+  title: string;
+  description: string;
+}
+
+interface WelcomeCoachCopy {
+  preview: string;
+  badge: string;
+  headingPrefix: string;
+  headingAccent: string;
+  intro: string;
+  stepsLabel: string;
+  cta: string;
+  outro: string;
+  signatureName: string;
+  signatureRole: string;
+  steps: WelcomeCoachStep[];
+}
+
+const copyByLocale: Record<SupportedLocale, WelcomeCoachCopy> = {
+  fr: copyFr,
+  en: copyEn,
 };
 
 export default function FitdeskWelcomeCoach({

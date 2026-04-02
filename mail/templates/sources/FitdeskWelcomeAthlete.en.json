@@ -1,0 +1,17 @@
+{
+  "preview": "Your athlete space is ready, {{ firstName }}.",
+  "badge": "Your athlete space is ready",
+  "headingPrefix": "READY TO",
+  "headingAccent": "PERFORM",
+  "intro": "Your FitDesk space is ready. Find your personalized programs, progress tracking, wellness report, and nutrition plan all in one place to move forward with a clear structure, session after session.",
+  "features": [
+    "Custom programs",
+    "Progress tracking",
+    "Wellness report",
+    "Nutrition plan"
+  ],
+  "cta": "ACCESS MY SPACE",
+  "outro": "If you need help, use the Help / Messages section from your FitDesk space to contact us.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Founder · FitDesk"
+}

@@ -89,9 +89,8 @@ Content-Type: application/json
     "input": {
       "to": "thomas.things@gmail.com",
       "subject": "Bienvenue sur FitDesk, Thomas. 🎉",
-      "template": "fitdeskwelcomecoach.html",
-      "locale": "fr",
-      "variables": {
+      "template": "fitdeskwelcomecoach.fr.html",
+      "variables": {  
         "firstName": "Thomas"
       }
     }
@@ -108,8 +107,7 @@ Content-Type: application/json
     "input": {
       "to": "thomas.things@gmail.com",
       "subject": "Bienvenue sur FitDesk, Thomas. 🎉",
-      "template": "fitdeskwelcomeathlete.html",
-      "locale": "fr",
+      "template": "fitdeskwelcomeathlete.fr.html",
       "variables": {
         "firstName": "Thomas"
       }

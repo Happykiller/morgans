@@ -1,75 +1,111 @@
 # Morgans
 
-**Morgans** is a simple and extensible **GraphQL** service for sending emails via SMTP.
+Morgans est un microservice **FastAPI + GraphQL** dédié à l'envoi d'e-mails via SMTP.
+Le projet est léger, orienté service interne, et fournit deux cas d'usage:
 
-## Features
+- envoi d'e-mail texte/HTML,
+- envoi d'e-mail à partir de templates HTML compilés.
 
-- GraphQL mutation `sendMail` to send emails (plain text or HTML).
-- Secure reading of SMTP configuration from `.env` file.
-- Deployment in development and production environments via **Docker Compose**.
-- Detailed SMTP logging to ease debugging.
+---
 
-## Tech Stack
+## Revue technique du projet
 
-- **FastAPI** for the web API.
-- **Strawberry GraphQL** for defining the GraphQL schema.
-- **aiosmtplib** for asynchronous email sending.
-- **Pydantic Settings** for environment-based configuration.
-- **Poetry** for dependency management.
-- **Docker** and **Docker Compose** for deployment.
+### Positionnement architecture
 
-## Quick Start
+L'architecture actuelle est simple et pragmatique:
 
-### 1. Clone the repository
+- **Entrée API**: `main.py` expose l'endpoint GraphQL `/graphql`.
+- **Couche présentation GraphQL**: `schema/queries.py`, `schema/mutations.py`, `schema/types.py`.
+- **Couche infrastructure**: `mail/smtp.py` (SMTP + rendu Jinja2), `config.py` (chargement des variables d'environnement).
+
+> Remarque: le projet n'est pas encore structuré en hexagonal stricte (pas de couche `core/usecases` distincte), mais la séparation API / infrastructure est déjà en place et peut évoluer proprement.
+
+### Capacités fonctionnelles actuellement disponibles
+
+- **Query `ping`** pour health-check rapide.
+- **Query `system`** pour exposer la configuration SMTP active (hors mot de passe), ainsi que la version lue depuis `VERSION`.
+- **Mutation `sendMail`** pour l'envoi standard.
+- **Mutation `sendMailWithTemplate`** pour l'envoi basé sur template compilé + variables JSON + locale.
+- **Fallback de templates localisés**: recherche `template.<locale>.html` puis `template.html`.
+
+### Qualité actuelle (synthèse)
+
+- **Points forts**
+  - Stack moderne et concise (FastAPI, Strawberry, aiosmtplib, Pydantic Settings).
+  - Configuration externalisée via `.env` / `.env.dev`.
+  - Outils dev/prod clairs via `Makefile` et Docker Compose.
+  - Pipeline de rendu de templates mail déjà opérationnel.
+
+- **Points d'attention**
+  - Gestion d'erreurs orientée message brut (`str(e)`) côté mutations (à normaliser).
+  - Peu de garde-fous de validation métier (format d'e-mail, contraintes sur variables templates).
+  - Pas de suite de tests automatisés visible (unitaires/intégration).
+  - Exposition potentielle de données de configuration via `system` à restreindre selon l'environnement.
+
+---
+
+## Stack technique
+
+- **Python 3.11**
+- **FastAPI**
+- **Strawberry GraphQL**
+- **aiosmtplib**
+- **Pydantic Settings**
+- **Jinja2**
+- **Poetry**
+- **Docker / Docker Compose**
+
+---
+
+## Démarrage rapide
+
+### 1) Cloner le dépôt
 
 ```bash
 git clone <repo-url>
 cd morgans
 ```
 
-### 2. Set up your environment
+### 2) Configurer l'environnement
 
-Create a `.env` file at the root:
+Créer un fichier `.env.dev` (développement) ou `.env` (production):
 
 ```dotenv
 SMTP_HOST=smtp.example.com
 SMTP_PORT=587
 SMTP_USER=your_username
 SMTP_PASSWORD=your_password
+SMTP_TLS=false
 MAIL_FROM=you@example.com
 ```
 
-### 3. Run in development mode
+### 3) Lancer en développement
 
 ```bash
-docker-compose up morgans-dev
+make dev-up
 ```
 
-Access GraphQL API: [http://localhost:8000/graphql](http://localhost:8000/graphql)
+Accès API GraphQL: [http://localhost:8025/graphql](http://localhost:8025/graphql)
 
-_(with automatic reload thanks to Uvicorn)_
+### 4) Lancer en production (compose prod)
 
-### 4. Run in production mode
-
-Make sure the Docker network `interservices` exists:
+Créer le réseau partagé si nécessaire:
 
 ```bash
 docker network create interservices
 ```
 
-Then launch:
+Puis démarrer:
 
 ```bash
-docker-compose -f docker-compose.prod.yml up -d
+make morgans
 ```
 
-Access GraphQL API: [http://<your-server>:8025/graphql](http://<your-server>:8025/graphql)
+---
 
-## API Usage
+## API GraphQL
 
 ### Mutation `sendMail`
-
-#### Example Query
 
 ```graphql
 mutation SendMail($input: MailInput!) {
@@ -80,7 +116,7 @@ mutation SendMail($input: MailInput!) {
 }
 ```
 
-#### Variables
+Variables:
 
 ```json
 {
@@ -93,38 +129,120 @@ mutation SendMail($input: MailInput!) {
 }
 ```
 
-## Project Structure
+### Mutation `sendMailWithTemplate`
 
-```
-.
-├── mail/
-│   └── smtp.py          # SMTP sending logic
-├── schema/
-│   ├── queries.py       # Ping query
-│   ├── mutations.py     # sendMail mutation
-│   └── types.py         # GraphQL types definition
-├── main.py              # FastAPI and GraphQL initialization
-├── config.py            # Secure SMTP config loading
-├── Dockerfile           # Docker image build
-├── docker-compose.yml   # Development environment
-├── docker-compose.prod.yml # Production environment
-├── pyproject.toml       # Poetry dependencies
-└── README.md            # Documentation
+```graphql
+mutation SendMailWithTemplate($input: MailTemplateInput!) {
+  sendMailWithTemplate(input: $input) {
+    success
+    message
+  }
+}
 ```
 
-## Compile template
+Variables:
 
+```json
+{
+  "input": {
+    "to": "recipient@example.com",
+    "subject": "Welcome",
+    "template": "welcome.html",
+    "variables": {
+      "firstName": "Alex"
+    },
+    "locale": "fr"
+  }
+}
 ```
+
+### Query `system`
+
+```graphql
+query {
+  system {
+    smtpHost
+    smtpPort
+    smtpUser
+    mailFrom
+    smtpTls
+    version
+  }
+}
+```
+
+---
+
+## Templates e-mail
+
+Sources React/TSX: `mail/templates/sources`
+
+Templates compilés HTML: `mail/templates/compiled`
+
+Compilation manuelle d'un template:
+
+```bash
 cd mail/templates
 npx tsx render.ts Welcome
 ```
 
-## Security Notes
+Ou via Makefile (conteneur dev):
 
-- **Do not expose** this service directly to the Internet without additional protection.
-- It is intended to be used **only within internal Docker networks**.
+```bash
+make render-template name=Welcome
+```
 
 ---
 
-> Project initialized by **Fabrice**.
+## Commandes utiles
 
+```bash
+make help            # liste complète
+make dev             # lancement local uvicorn avec .env.dev
+make dev-up          # stack dev (docker compose)
+make logs            # logs du conteneur
+make test-send       # test d'envoi via mutation GraphQL
+make version         # version exposée par l'API
+```
+
+---
+
+## Structure du projet
+
+```text
+.
+├── main.py
+├── config.py
+├── schema/
+│   ├── queries.py
+│   ├── mutations.py
+│   └── types.py
+├── mail/
+│   ├── smtp.py
+│   └── templates/
+│       ├── sources/
+│       └── compiled/
+├── docker-compose.yml
+├── docker-compose.prod.yml
+├── Dockerfile
+├── Makefile
+└── README.md
+```
+
+---
+
+## Sécurité et exploitation
+
+- Ne pas exposer ce service directement sur Internet sans authentification, ACL réseau et rate-limiting.
+- Restreindre l'accès à l'endpoint GraphQL aux services de confiance.
+- Éviter de versionner des variables sensibles dans les fichiers d'environnement.
+
+---
+
+## Roadmap recommandée
+
+1. Introduire une structure hexagonale explicite (`core/usecases`, `adapters`).
+2. Ajouter des tests automatisés (unitaires + intégration SMTP mock).
+3. Standardiser les erreurs API (codes fonctionnels + messages stables).
+4. Ajouter observabilité (logs structurés, corrélation, métriques).
+5. Ajouter garde-fous de sécurité (authN/authZ, quotas, validation renforcée).

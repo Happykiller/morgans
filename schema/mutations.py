@@ -1,7 +1,9 @@
 # schema/mutations.py
 import strawberry
 
-from logging_utils import get_logger, utc_timestamp
+from logging_utils import get_logger
+from logging_utils import utc_timestamp
+from mail.smtp import normalize_template_name
 from mail.smtp import send_email
 from mail.smtp import send_email_with_template
 from schema.types import MailInput
@@ -71,6 +73,7 @@ class Mutation:
         """Send a template-based email and log the processing status."""
         subject_prefix = input.subject[:80]
         request_ts = utc_timestamp()
+        normalized_template = normalize_template_name(input.template)
 
         logger.info(
             "mail_template_request_received",
@@ -78,7 +81,7 @@ class Mutation:
                 "event": "mail_template_request_received",
                 "recipient": input.to,
                 "subject": subject_prefix,
-                "template": input.template,
+                "template": normalized_template,
                 "status": "received",
                 "detail": f"request_ts={request_ts}",
             },
@@ -98,7 +101,7 @@ class Mutation:
                     "event": "mail_template_processing_failed",
                     "recipient": input.to,
                     "subject": subject_prefix,
-                    "template": input.template,
+                    "template": normalized_template,
                     "status": "failed",
                     "detail": type(error).__name__,
                 },
@@ -111,7 +114,7 @@ class Mutation:
                 "event": "mail_template_processing_succeeded",
                 "recipient": input.to,
                 "subject": subject_prefix,
-                "template": input.template,
+                "template": normalized_template,
                 "status": "succeeded",
                 "detail": f"request_ts={request_ts}",
             },

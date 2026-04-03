@@ -221,6 +221,7 @@ Chaque ligne inclut notamment:
 - template (`template`),
 - statut de traitement (`status`),
 - détail technique (`detail`).
+- alias legacy `*.classic.html` normalisé vers `*.en.html` (fallback par défaut quand le pays/locale est inconnu).
 
 Variable d'environnement disponible:
 

@@ -10,6 +10,9 @@ from logging_utils import get_logger
 
 COMPILED_TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), "templates/compiled/")
 
+_DEFAULT_LOCALE = "en"
+_CLASSIC_TAG = ".classic."
+
 template_env = Environment(
     loader=FileSystemLoader(COMPILED_TEMPLATES_DIR),
     autoescape=select_autoescape(["html", "xml"]),
@@ -18,10 +21,32 @@ template_env = Environment(
 logger = get_logger("morgans.smtp")
 
 
+def normalize_template_name(template_name: str) -> str:
+    """Normalize legacy template aliases to a deterministic locale fallback.
+
+    Business rule: if locale is unknown and a `classic` alias is provided,
+    default to English (`.en.`) rather than keeping `.classic.`.
+    """
+    if _CLASSIC_TAG in template_name:
+        return template_name.replace(_CLASSIC_TAG, f".{_DEFAULT_LOCALE}.")
+
+    return template_name
+
+
 def resolve_template_name(template_name: str) -> str:
-    """Return template name when the file exists in compiled templates."""
-    if os.path.exists(os.path.join(COMPILED_TEMPLATES_DIR, template_name)):
+    """Return an existing compiled template name.
+
+    It first checks the exact requested name, then checks the normalized
+    fallback alias (for legacy `.classic.` requests).
+    """
+    direct_path = os.path.join(COMPILED_TEMPLATES_DIR, template_name)
+    if os.path.exists(direct_path):
         return template_name
+
+    normalized_name = normalize_template_name(template_name)
+    normalized_path = os.path.join(COMPILED_TEMPLATES_DIR, normalized_name)
+    if os.path.exists(normalized_path):
+        return normalized_name
 
     raise FileNotFoundError(f"Template '{template_name}' not found.")
 
@@ -34,6 +59,20 @@ async def send_email_with_template(
 ):
     """Render and send an email from an HTML template."""
     resolved_template_name = resolve_template_name(template_name)
+
+    if resolved_template_name != template_name:
+        logger.info(
+            "template_alias_normalized",
+            extra={
+                "event": "template_alias_normalized",
+                "recipient": to,
+                "subject": subject[:80],
+                "template": resolved_template_name,
+                "status": "normalized",
+                "detail": f"requested={template_name}",
+            },
+        )
+
     template = template_env.get_template(resolved_template_name)
     rendered_body = template.render(**variables)
 

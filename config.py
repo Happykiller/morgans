@@ -1,7 +1,9 @@
 # config.py
 from typing import Optional
+
 from pydantic_settings import BaseSettings
 from pydantic_settings import SettingsConfigDict
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -16,5 +18,7 @@ class Settings(BaseSettings):
     SMTP_TLS: Optional[bool] = False
     SMTP_PASSWORD: Optional[str] = None
     MAIL_FROM: Optional[str] = None
+    LOG_LEVEL: str = "INFO"
+
 
 settings = Settings()

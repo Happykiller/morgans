@@ -5,6 +5,7 @@ import aiosmtplib
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from config import settings
+from logging_utils import get_logger
 
 
 COMPILED_TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), "templates/compiled/")
@@ -13,6 +14,8 @@ template_env = Environment(
     loader=FileSystemLoader(COMPILED_TEMPLATES_DIR),
     autoescape=select_autoescape(["html", "xml"]),
 )
+
+logger = get_logger("morgans.smtp")
 
 
 def resolve_template_name(template_name: str) -> str:
@@ -29,13 +32,28 @@ async def send_email_with_template(
     template_name: str,
     variables: dict,
 ):
+    """Render and send an email from an HTML template."""
     resolved_template_name = resolve_template_name(template_name)
     template = template_env.get_template(resolved_template_name)
     rendered_body = template.render(**variables)
-    await send_email(to=to, subject=subject, body=rendered_body, html=True)
+
+    await send_email(
+        to=to,
+        subject=subject,
+        body=rendered_body,
+        html=True,
+        template_name=resolved_template_name,
+    )
 
 
-async def send_email(to: str, subject: str, body: str, html: bool = False):
+async def send_email(
+    to: str,
+    subject: str,
+    body: str,
+    html: bool = False,
+    template_name: str | None = None,
+):
+    """Send an email through SMTP and emit activity logs for observability."""
     if not settings.MAIL_FROM:
         raise ValueError("MAIL_FROM must be set in the environment.")
 
@@ -60,4 +78,44 @@ async def send_email(to: str, subject: str, body: str, html: bool = False):
     if settings.SMTP_PASSWORD:
         send_args["password"] = settings.SMTP_PASSWORD
 
-    await aiosmtplib.send(msg, **send_args)
+    subject_prefix = subject[:80]
+
+    logger.info(
+        "smtp_send_started",
+        extra={
+            "event": "smtp_send_started",
+            "recipient": to,
+            "subject": subject_prefix,
+            "template": template_name or "raw",
+            "status": "started",
+            "detail": f"html={html}",
+        },
+    )
+
+    try:
+        await aiosmtplib.send(msg, **send_args)
+    except Exception as error:
+        logger.exception(
+            "smtp_send_failed",
+            extra={
+                "event": "smtp_send_failed",
+                "recipient": to,
+                "subject": subject_prefix,
+                "template": template_name or "raw",
+                "status": "failed",
+                "detail": type(error).__name__,
+            },
+        )
+        raise
+
+    logger.info(
+        "smtp_send_succeeded",
+        extra={
+            "event": "smtp_send_succeeded",
+            "recipient": to,
+            "subject": subject_prefix,
+            "template": template_name or "raw",
+            "status": "succeeded",
+            "detail": "delivered_to_smtp",
+        },
+    )

@@ -204,6 +204,30 @@ make render-template name=Welcome
 
 ---
 
+
+### Logs d'activité e-mail
+
+Le service produit désormais des logs structurés pour chaque demande d'envoi:
+
+- réception de la demande (`mail_request_received`, `mail_template_request_received`),
+- démarrage envoi SMTP (`smtp_send_started`),
+- résultat du traitement (`*_succeeded` / `*_failed`).
+
+Chaque ligne inclut notamment:
+
+- horodatage UTC,
+- destinataire (`recipient`),
+- début du sujet (`subject`, tronqué à 80 caractères),
+- template (`template`),
+- statut de traitement (`status`),
+- détail technique (`detail`).
+
+Variable d'environnement disponible:
+
+```dotenv
+LOG_LEVEL=INFO
+```
+
 ## Commandes utiles
 
 ```bash

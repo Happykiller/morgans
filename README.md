@@ -178,6 +178,14 @@ Sources React/TSX: `mail/templates/sources`
 
 Templates compilés HTML: `mail/templates/compiled`
 
+Référence technique des templates (catalogue + paramètres supportés):
+
+- `docs/template-technical-reference.md`
+
+Scénarios de test HTTP prêts à exécuter (GraphQL):
+
+- `docs/req.http`
+
 Template mot de passe oublié disponible:
 
 - `FitdeskForgotPassword` (inputs attendus dans les variables de rendu: `email`, `resetPasswordUrl`).

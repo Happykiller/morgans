@@ -30,3 +30,7 @@ poetry.lock
 *.img
 
 node_modules/
+
+CLAUDE.md
+GEMINI.md
+CODEX.md

@@ -1,0 +1,15 @@
+{
+  "preview": "Ton changement de formule est actif.",
+  "badge": "Changement de formule",
+  "headingPrefix": "Ton upgrade est",
+  "headingAccent": "actif",
+  "intro": "Ta nouvelle formule est effective immediatement. Tu peux accueillir plus de clients des maintenant.",
+  "previousPlanLabel": "Ancienne formule",
+  "newPlanLabel": "Nouvelle formule",
+  "clientLimitLabel": "Clients autorises",
+  "growthTitle": "Ton activite grandit.",
+  "growthBody": "Continue comme ca. Chaque nouveau client, c'est ton potentiel qui se libere un peu plus.",
+  "cta": "Acceder a mon espace",
+  "signatureName": "Alexandre",
+  "signatureRole": "Fondateur · FitDesk"
+}

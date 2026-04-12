@@ -1,0 +1,17 @@
+{
+  "preview": "Ta nouvelle formule est active.",
+  "badge": "Changement de formule",
+  "headingPrefix": "Ta nouvelle formule est",
+  "headingAccent": "active",
+  "intro": "Ton changement est pris en compte. Toutes tes fonctionnalites restent disponibles, seul le nombre de clients actifs change.",
+  "previousPlanLabel": "Ancienne formule",
+  "newPlanLabel": "Nouvelle formule",
+  "clientLimitLabel": "Clients autorises",
+  "overflowTitle": "Si tu depasses la limite de clients actifs",
+  "overflowBody": "Tu peux choisir lesquels garder actifs. Les autres passent en archives, leurs donnees restent conservees.",
+  "rhythmTitle": "Chaque etape a son rythme.",
+  "rhythmBody": "FitDesk grandit avec toi dans les deux sens. Quand tu veux repasser a la vitesse superieure, un clic suffit.",
+  "cta": "Acceder a mon espace",
+  "signatureName": "Alexandre",
+  "signatureRole": "Fondateur · FitDesk"
+}

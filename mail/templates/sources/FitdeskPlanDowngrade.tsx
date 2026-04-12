@@ -9,6 +9,10 @@ import {
   Section,
   Text,
 } from '@react-email/components';
+import copyEn from './FitdeskPlanDowngrade.en.json';
+import copyFr from './FitdeskPlanDowngrade.fr.json';
+
+type SupportedLocale = 'fr' | 'en';
 
 interface FitdeskPlanDowngradeProps {
   locale?: string;
@@ -32,15 +36,39 @@ const previousClientLimit = '{{ previousClientLimit }}';
 const newClientLimit = '{{ newClientLimit }}';
 const ctaUrl = '{{ ctaUrl }}';
 
+interface PlanDowngradeCopy {
+  preview: string;
+  badge: string;
+  headingPrefix: string;
+  headingAccent: string;
+  intro: string;
+  previousPlanLabel: string;
+  newPlanLabel: string;
+  clientLimitLabel: string;
+  overflowTitle: string;
+  overflowBody: string;
+  rhythmTitle: string;
+  rhythmBody: string;
+  cta: string;
+  signatureName: string;
+  signatureRole: string;
+}
+
+const copyByLocale: Record<SupportedLocale, PlanDowngradeCopy> = {
+  fr: copyFr,
+  en: copyEn,
+};
+
 export default function FitdeskPlanDowngrade({
   locale = 'fr',
 }: FitdeskPlanDowngradeProps) {
-  void locale;
+  const normalizedLocale = locale.toLowerCase() as SupportedLocale;
+  const copy = copyByLocale[normalizedLocale] ?? copyByLocale.fr;
 
   return (
     <Html>
       <Head />
-      <Preview>Ta nouvelle formule est active.</Preview>
+      <Preview>{copy.preview}</Preview>
       <Body
         style={{
           margin: 0,
@@ -89,7 +117,7 @@ export default function FitdeskPlanDowngrade({
                   textTransform: 'uppercase',
                 }}
               >
-                Changement de formule
+                {copy.badge}
               </Text>
 
               <Text
@@ -102,9 +130,11 @@ export default function FitdeskPlanDowngrade({
                   textTransform: 'uppercase',
                 }}
               >
-                Ta nouvelle formule est
+                {copy.headingPrefix}
                 <br />
-                <span style={{ color: colors.red }}>active, {firstName}.</span>
+                <span style={{ color: colors.red }}>
+                  {copy.headingAccent}, {firstName}.
+                </span>
               </Text>
 
               <Text
@@ -116,8 +146,7 @@ export default function FitdeskPlanDowngrade({
                   fontWeight: 300,
                 }}
               >
-                Ton changement est pris en compte. Toutes tes fonctionnalites
-                restent disponibles, seul le nombre de clients actifs change.
+                {copy.intro}
               </Text>
 
               <Section
@@ -144,7 +173,7 @@ export default function FitdeskPlanDowngrade({
                               textTransform: 'uppercase',
                             }}
                           >
-                            Ancienne formule
+                            {copy.previousPlanLabel}
                           </Text>
                           <Text
                             style={{
@@ -185,7 +214,7 @@ export default function FitdeskPlanDowngrade({
                               textTransform: 'uppercase',
                             }}
                           >
-                            Nouvelle formule
+                            {copy.newPlanLabel}
                           </Text>
                           <Text
                             style={{
@@ -227,7 +256,7 @@ export default function FitdeskPlanDowngrade({
                             textTransform: 'uppercase',
                           }}
                         >
-                          Clients autorises
+                          {copy.clientLimitLabel}
                         </Text>
                       </td>
                       <td align="right">
@@ -275,7 +304,7 @@ export default function FitdeskPlanDowngrade({
                     fontWeight: 600,
                   }}
                 >
-                  Si tu depasses la limite de clients actifs
+                  {copy.overflowTitle}
                 </Text>
                 <Text
                   style={{
@@ -285,8 +314,7 @@ export default function FitdeskPlanDowngrade({
                     lineHeight: '19px',
                   }}
                 >
-                  Tu peux choisir lesquels garder actifs. Les autres passent en
-                  archives, leurs donnees restent conservees.
+                  {copy.overflowBody}
                 </Text>
               </Section>
 
@@ -309,7 +337,7 @@ export default function FitdeskPlanDowngrade({
                     textTransform: 'uppercase',
                   }}
                 >
-                  Chaque etape a son rythme.
+                  {copy.rhythmTitle}
                 </Text>
                 <Text
                   style={{
@@ -320,8 +348,7 @@ export default function FitdeskPlanDowngrade({
                     fontWeight: 300,
                   }}
                 >
-                  FitDesk grandit avec toi dans les deux sens. Quand tu veux
-                  repasser a la vitesse superieure, un clic suffit.
+                  {copy.rhythmBody}
                 </Text>
               </Section>
 
@@ -344,7 +371,7 @@ export default function FitdeskPlanDowngrade({
                   marginBottom: '16px',
                 }}
               >
-                Acceder a mon espace <span style={{ color: colors.red }}>→</span>
+                {copy.cta} <span style={{ color: colors.red }}>→</span>
               </Button>
 
               <Text
@@ -355,9 +382,9 @@ export default function FitdeskPlanDowngrade({
                   lineHeight: '22px',
                 }}
               >
-                <strong>Alexandre</strong>
+                <strong>{copy.signatureName}</strong>
                 <br />
-                <span style={{ color: colors.muted }}>Fondateur · FitDesk</span>
+                <span style={{ color: colors.muted }}>{copy.signatureRole}</span>
               </Text>
             </Section>
 

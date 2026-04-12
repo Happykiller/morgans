@@ -1,0 +1,17 @@
+{
+  "preview": "Your new plan is active.",
+  "badge": "Plan change",
+  "headingPrefix": "Your new plan is",
+  "headingAccent": "active",
+  "intro": "Your change has been applied. All your features remain available, only the number of active clients changes.",
+  "previousPlanLabel": "Previous plan",
+  "newPlanLabel": "New plan",
+  "clientLimitLabel": "Allowed clients",
+  "overflowTitle": "If you exceed the active client limit",
+  "overflowBody": "You can choose which clients stay active. The others move to archives and their data remains stored.",
+  "rhythmTitle": "Every stage has its own pace.",
+  "rhythmBody": "FitDesk grows with you in both directions. When you want to move back up, one click is enough.",
+  "cta": "Access my space",
+  "signatureName": "Alexandre",
+  "signatureRole": "Founder · FitDesk"
+}

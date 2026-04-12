@@ -1,0 +1,15 @@
+{
+  "preview": "Your plan change is active.",
+  "badge": "Plan change",
+  "headingPrefix": "Your upgrade is",
+  "headingAccent": "active",
+  "intro": "Your new plan is effective immediately. You can welcome more clients starting now.",
+  "previousPlanLabel": "Previous plan",
+  "newPlanLabel": "New plan",
+  "clientLimitLabel": "Allowed clients",
+  "growthTitle": "Your business is growing.",
+  "growthBody": "Keep going. Every new client unlocks a little more of your potential.",
+  "cta": "Access my space",
+  "signatureName": "Alexandre",
+  "signatureRole": "Founder · FitDesk"
+}

@@ -9,6 +9,10 @@ import {
   Section,
   Text,
 } from '@react-email/components';
+import copyEn from './FitdeskPlanUpgrade.en.json';
+import copyFr from './FitdeskPlanUpgrade.fr.json';
+
+type SupportedLocale = 'fr' | 'en';
 
 interface FitdeskPlanUpgradeProps {
   locale?: string;
@@ -32,15 +36,37 @@ const previousClientLimit = '{{ previousClientLimit }}';
 const newClientLimit = '{{ newClientLimit }}';
 const ctaUrl = '{{ ctaUrl }}';
 
+interface PlanUpgradeCopy {
+  preview: string;
+  badge: string;
+  headingPrefix: string;
+  headingAccent: string;
+  intro: string;
+  previousPlanLabel: string;
+  newPlanLabel: string;
+  clientLimitLabel: string;
+  growthTitle: string;
+  growthBody: string;
+  cta: string;
+  signatureName: string;
+  signatureRole: string;
+}
+
+const copyByLocale: Record<SupportedLocale, PlanUpgradeCopy> = {
+  fr: copyFr,
+  en: copyEn,
+};
+
 export default function FitdeskPlanUpgrade({
   locale = 'fr',
 }: FitdeskPlanUpgradeProps) {
-  void locale;
+  const normalizedLocale = locale.toLowerCase() as SupportedLocale;
+  const copy = copyByLocale[normalizedLocale] ?? copyByLocale.fr;
 
   return (
     <Html>
       <Head />
-      <Preview>Ton changement de formule est actif.</Preview>
+      <Preview>{copy.preview}</Preview>
       <Body
         style={{
           margin: 0,
@@ -89,7 +115,7 @@ export default function FitdeskPlanUpgrade({
                   textTransform: 'uppercase',
                 }}
               >
-                Changement de formule
+                {copy.badge}
               </Text>
 
               <Text
@@ -102,9 +128,11 @@ export default function FitdeskPlanUpgrade({
                   textTransform: 'uppercase',
                 }}
               >
-                Ton upgrade est
+                {copy.headingPrefix}
                 <br />
-                <span style={{ color: colors.red }}>actif, {firstName}.</span>
+                <span style={{ color: colors.red }}>
+                  {copy.headingAccent}, {firstName}.
+                </span>
               </Text>
 
               <Text
@@ -116,8 +144,7 @@ export default function FitdeskPlanUpgrade({
                   fontWeight: 300,
                 }}
               >
-                Ta nouvelle formule est effective immediatement. Tu peux accueillir
-                plus de clients des maintenant.
+                {copy.intro}
               </Text>
 
               <Section
@@ -144,7 +171,7 @@ export default function FitdeskPlanUpgrade({
                               textTransform: 'uppercase',
                             }}
                           >
-                            Ancienne formule
+                            {copy.previousPlanLabel}
                           </Text>
                           <Text
                             style={{
@@ -185,7 +212,7 @@ export default function FitdeskPlanUpgrade({
                               textTransform: 'uppercase',
                             }}
                           >
-                            Nouvelle formule
+                            {copy.newPlanLabel}
                           </Text>
                           <Text
                             style={{
@@ -227,7 +254,7 @@ export default function FitdeskPlanUpgrade({
                             textTransform: 'uppercase',
                           }}
                         >
-                          Clients autorises
+                          {copy.clientLimitLabel}
                         </Text>
                       </td>
                       <td align="right">
@@ -276,7 +303,7 @@ export default function FitdeskPlanUpgrade({
                     textTransform: 'uppercase',
                   }}
                 >
-                  Ton activite grandit.
+                  {copy.growthTitle}
                 </Text>
                 <Text
                   style={{
@@ -287,8 +314,7 @@ export default function FitdeskPlanUpgrade({
                     fontWeight: 300,
                   }}
                 >
-                  Continue comme ca. Chaque nouveau client, c&apos;est ton potentiel
-                  qui se libere un peu plus.
+                  {copy.growthBody}
                 </Text>
               </Section>
 
@@ -311,7 +337,7 @@ export default function FitdeskPlanUpgrade({
                   marginBottom: '16px',
                 }}
               >
-                Acceder a mon espace <span style={{ color: colors.red }}>→</span>
+                {copy.cta} <span style={{ color: colors.red }}>→</span>
               </Button>
 
               <Text
@@ -322,9 +348,9 @@ export default function FitdeskPlanUpgrade({
                   lineHeight: '22px',
                 }}
               >
-                <strong>Alexandre</strong>
+                <strong>{copy.signatureName}</strong>
                 <br />
-                <span style={{ color: colors.muted }}>Fondateur · FitDesk</span>
+                <span style={{ color: colors.muted }}>{copy.signatureRole}</span>
               </Text>
             </Section>
 

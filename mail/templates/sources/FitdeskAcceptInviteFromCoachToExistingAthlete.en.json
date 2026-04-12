@@ -1,0 +1,17 @@
+{
+  "preview": "{{ athleteName }} accepted your FitDesk invitation.",
+  "badge": "Invitation accepted",
+  "headingPrefix": "INVITATION",
+  "headingAccent": "ACCEPTED",
+  "intro": "{{ athleteName }} accepted the invitation sent from FitDesk. An active contract was created.",
+  "summaryLabel": "Summary",
+  "athleteLabel": "Athlete",
+  "statusLabel": "Status",
+  "contractLabel": "Contract",
+  "effectiveDateLabel": "Contract effective date",
+  "statusValue": "Invitation accepted",
+  "contractValue": "Active contract created",
+  "note": "This notification confirms the final business outcome. The contract takes effect on the server date shown above.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Founder · FitDesk"
+}

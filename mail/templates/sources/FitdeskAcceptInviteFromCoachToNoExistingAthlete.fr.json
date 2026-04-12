@@ -1,0 +1,19 @@
+{
+  "preview": "{{ athleteName }} a rejoint FitDesk suite à ton invitation.",
+  "badge": "Invitation acceptée",
+  "headingPrefix": "NOUVEL",
+  "headingAccent": "ATHLÈTE",
+  "intro": "{{ athleteName }} a complété le parcours d’invitation, rejoint FitDesk et accepté ton invitation. Un contrat actif a été créé.",
+  "summaryLabel": "Résumé",
+  "athleteLabel": "Nouvel athlète",
+  "originLabel": "Origine",
+  "statusLabel": "Statut",
+  "contractLabel": "Contrat",
+  "effectiveDateLabel": "Date d’effet du contrat",
+  "originValue": "Parcours d’invitation FitDesk",
+  "statusValue": "Invitation acceptée",
+  "contractValue": "Contrat actif créé",
+  "note": "Cette notification confirme qu’un nouvel athlète a rejoint FitDesk à la suite de ton invitation. Le contrat prend effet à la date du jour serveur indiquée ci-dessus.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Fondateur · FitDesk"
+}

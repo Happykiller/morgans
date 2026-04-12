@@ -22,6 +22,12 @@ Example:
 | `fitdeskwelcomecoach.fr.html` / `fitdeskwelcomecoach.en.html` | FitDesk coach onboarding welcome | `firstName` |
 | `fitdeskwelcomeathlete.fr.html` / `fitdeskwelcomeathlete.en.html` | FitDesk athlete onboarding welcome | `firstName` |
 | `fitdeskforgotpassword.fr.html` / `fitdeskforgotpassword.en.html` | FitDesk password reset email | `email`, `resetPasswordUrl` |
+| `fitdeskacceptinvitefromcoachtoexistingathlete.fr.html` / `fitdeskacceptinvitefromcoachtoexistingathlete.en.html` | FitDesk notification sent to a coach when an existing athlete accepts an invitation | `firstName`, `athleteName`, `contractEffectiveDate` |
+| `fitdeskacceptinvitefromcoachtonoexistingathlete.fr.html` / `fitdeskacceptinvitefromcoachtonoexistingathlete.en.html` | FitDesk notification sent to a coach when a newly registered invitee completes the invitation flow and accepts | `firstName`, `athleteName`, `contractEffectiveDate` |
+| `fitdeskdeclineinvitefromcoachtoexistingathlete.fr.html` / `fitdeskdeclineinvitefromcoachtoexistingathlete.en.html` | FitDesk notification sent to a coach when an existing athlete declines an invitation | `firstName`, `athleteName` |
+| `fitdeskdeclineinvitefromcoachtonoexistingathlete.fr.html` / `fitdeskdeclineinvitefromcoachtonoexistingathlete.en.html` | FitDesk notification sent to a coach when a non-registered invitee declines an invitation | `firstName`, `invitedEmail`, `accountCreated` |
+| `fitdeskinvitefromcoachtoexistingathlete.fr.html` / `fitdeskinvitefromcoachtoexistingathlete.en.html` | FitDesk coach invitation sent to an existing athlete | `firstName`, `coachName`, `invitationUrl` |
+| `fitdeskinvitefromcoachtonoexistingathlete.fr.html` / `fitdeskinvitefromcoachtonoexistingathlete.en.html` | FitDesk coach invitation sent to a person without an existing account | `firstName`, `coachName`, `invitationUrl` |
 | `fitdeskplanupgrade.fr.html` / `fitdeskplanupgrade.en.html` | FitDesk plan upgrade and trial-to-paid scenarios | `firstName`, `previousPlan`, `newPlan`, `previousClientLimit`, `newClientLimit`, `ctaUrl` |
 | `fitdeskplandowngrade.fr.html` / `fitdeskplandowngrade.en.html` | FitDesk plan downgrade scenarios | `firstName`, `previousPlan`, `newPlan`, `previousClientLimit`, `newClientLimit`, `ctaUrl` |
 
@@ -51,6 +57,53 @@ Example:
 |---|---|---|
 | `email` | yes | Account email shown in details block |
 | `resetPasswordUrl` | yes | Password reset URL used in CTA and fallback text |
+
+### `fitdeskacceptinvitefromcoachtoexistingathlete.*.html`
+
+| Variable | Required | Description |
+|---|---|---|
+| `firstName` | yes | Coach first name inserted in the hero title |
+| `athleteName` | yes | Athlete identity shown in preview and body copy |
+| `contractEffectiveDate` | yes | Effective date of the active contract, typically the server current date |
+
+### `fitdeskacceptinvitefromcoachtonoexistingathlete.*.html`
+
+| Variable | Required | Description |
+|---|---|---|
+| `firstName` | yes | Coach first name inserted in the hero title |
+| `athleteName` | yes | Identity of the new athlete created through the invitation flow |
+| `contractEffectiveDate` | yes | Effective date of the active contract, typically the server current date |
+
+### `fitdeskdeclineinvitefromcoachtoexistingathlete.*.html`
+
+| Variable | Required | Description |
+|---|---|---|
+| `firstName` | yes | Coach first name inserted in the hero title |
+| `athleteName` | yes | Athlete identity shown in preview and body copy |
+
+### `fitdeskdeclineinvitefromcoachtonoexistingathlete.*.html`
+
+| Variable | Required | Description |
+|---|---|---|
+| `firstName` | yes | Coach first name inserted in the hero title |
+| `invitedEmail` | yes | Invitee email shown in preview and body copy |
+| `accountCreated` | yes | Boolean flag indicating whether an account was created during form submission |
+
+### `fitdeskinvitefromcoachtoexistingathlete.*.html`
+
+| Variable | Required | Description |
+|---|---|---|
+| `firstName` | yes | Athlete first name inserted in the hero title |
+| `coachName` | yes | Inviting coach identity shown in preview and body copy |
+| `invitationUrl` | yes | Secure invitation URL used in CTA and fallback text |
+
+### `fitdeskinvitefromcoachtonoexistingathlete.*.html`
+
+| Variable | Required | Description |
+|---|---|---|
+| `firstName` | yes | Recipient first name inserted in the hero title |
+| `coachName` | yes | Inviting coach identity shown in preview and body copy |
+| `invitationUrl` | yes | Secure invitation URL used in CTA and fallback text |
 
 ### `fitdeskplanupgrade.*.html`
 

@@ -8,7 +8,7 @@ COMPOSE_PROD := docker compose -f docker-compose.prod.yml
         dev dev-up dev-up-build dev-shell \
         build docker-build tar load-prod-image run-prod \
         morgans morgans-build morgans-clean logs down shell \
-        render-template test-send status version
+        render-template test-send test-template-send status version
 
 ## 🆘 AIDE & INSTALLATION
 
@@ -38,6 +38,7 @@ help:
 	@echo "🎨 render-template     Render un template email .tsx → .html"
 	@echo "                        Utilisation : make render-template name=Welcome"
 	@echo "✉️  test-send          Envoie un e-mail de test en appelant GraphQL"
+	@echo "🧭 test-template-send Outil interactif pour tester un template email"
 	@echo "🔎 status              Affiche l’état des conteneurs, réseaux, images"
 	@echo "🔍 version             Affiche la version de l’application via GraphQL"
 	@echo ""
@@ -130,3 +131,6 @@ render-template:
 
 test-send:
 	./scripts/test-send.sh
+
+test-template-send:
+	python3 ./scripts/test-template-send.py

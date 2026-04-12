@@ -1,0 +1,20 @@
+{
+  "preview": "{{ invitedEmail }} declined your FitDesk invitation.",
+  "badge": "Invitation declined",
+  "headingPrefix": "INVITATION",
+  "headingAccent": "DECLINED",
+  "intro": "The invitation sent to {{ invitedEmail }} was declined. No contract was created.",
+  "summaryLabel": "Summary",
+  "invitedEmailLabel": "Invited email",
+  "statusLabel": "Status",
+  "accountLabel": "Account",
+  "contractLabel": "Contract",
+  "statusValue": "Invitation declined",
+  "accountCreatedValue": "Account created without contract",
+  "accountNotCreatedValue": "No account created",
+  "contractValue": "No contract created",
+  "accountCreatedNote": "The form was submitted with decline selected. An account may have been created, but no contract was created.",
+  "accountNotCreatedNote": "The invitation was declined without account creation and without contract creation.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Founder · FitDesk"
+}

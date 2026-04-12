@@ -1,0 +1,16 @@
+{
+  "preview": "{{ athleteName }} declined your FitDesk invitation.",
+  "badge": "Invitation declined",
+  "headingPrefix": "INVITATION",
+  "headingAccent": "DECLINED",
+  "intro": "{{ athleteName }} declined the invitation sent from FitDesk. No contract was created.",
+  "summaryLabel": "Summary",
+  "athleteLabel": "Athlete",
+  "statusLabel": "Status",
+  "contractLabel": "Contract",
+  "statusValue": "Invitation declined",
+  "contractValue": "No contract created",
+  "note": "This notification is informative only. It simply confirms the athlete's response, in a clear framework with no further action required.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Founder · FitDesk"
+}

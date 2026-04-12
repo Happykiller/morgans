@@ -186,6 +186,18 @@ Scénarios de test HTTP prêts à exécuter (GraphQL):
 
 - `docs/req.http`
 
+Outil interactif pour tester l'envoi d'un template:
+
+```bash
+make test-template-send
+```
+
+Mode liste rapide:
+
+```bash
+python3 scripts/test-template-send.py --list-templates
+```
+
 Template mot de passe oublié disponible:
 
 - `FitdeskForgotPassword` (inputs attendus dans les variables de rendu: `email`, `resetPasswordUrl`).

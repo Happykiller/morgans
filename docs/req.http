@@ -206,3 +206,122 @@ Content-Type: application/json
     }
   }
 }
+
+### sendMailWithTemplate FitDesk Invite From Coach To Existing Athlete
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "thomas.things@gmail.com",
+      "subject": "Thomas Martin t'invite a le rejoindre sur FitDesk",
+      "template": "fitdeskinvitefromcoachtoexistingathlete.fr.html",
+      "variables": {
+        "firstName": "Thomas",
+        "coachName": "Thomas Martin",
+        "invitationUrl": "https://app.fitdesk.io/invitations/respond/secure-token"
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Invite From Coach To No Existing Athlete
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "thomas.things@gmail.com",
+      "subject": "Thomas Martin t'invite a rejoindre FitDesk",
+      "template": "fitdeskinvitefromcoachtonoexistingathlete.fr.html",
+      "variables": {
+        "firstName": "Thomas",
+        "coachName": "Thomas Martin",
+        "invitationUrl": "https://app.fitdesk.io/invitations/public/secure-token"
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Decline Invite From Coach To Existing Athlete
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "coach@example.com",
+      "subject": "Thomas Bernard a refuse ton invitation FitDesk",
+      "template": "fitdeskdeclineinvitefromcoachtoexistingathlete.fr.html",
+      "variables": {
+        "firstName": "Thomas",
+        "athleteName": "Thomas Bernard"
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Accept Invite From Coach To Existing Athlete
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "coach@example.com",
+      "subject": "Thomas Bernard a accepte ton invitation FitDesk",
+      "template": "fitdeskacceptinvitefromcoachtoexistingathlete.fr.html",
+      "variables": {
+        "firstName": "Thomas",
+        "athleteName": "Thomas Bernard",
+        "contractEffectiveDate": "2026-04-12"
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Decline Invite From Coach To No Existing Athlete
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "coach@example.com",
+      "subject": "invitee@example.com a refuse ton invitation FitDesk",
+      "template": "fitdeskdeclineinvitefromcoachtonoexistingathlete.fr.html",
+      "variables": {
+        "firstName": "Thomas",
+        "invitedEmail": "invitee@example.com",
+        "accountCreated": true
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Accept Invite From Coach To No Existing Athlete
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "coach@example.com",
+      "subject": "Thomas Bernard a rejoint FitDesk suite a ton invitation",
+      "template": "fitdeskacceptinvitefromcoachtonoexistingathlete.fr.html",
+      "variables": {
+        "firstName": "Thomas",
+        "athleteName": "Thomas Bernard",
+        "contractEffectiveDate": "2026-04-12"
+      }
+    }
+  }
+}

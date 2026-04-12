@@ -1,0 +1,20 @@
+{
+  "preview": "{{ invitedEmail }} a refusé ton invitation FitDesk.",
+  "badge": "Invitation refusée",
+  "headingPrefix": "INVITATION",
+  "headingAccent": "REFUSÉE",
+  "intro": "L’invitation envoyée à {{ invitedEmail }} a été refusée. Aucun contrat n’a été créé.",
+  "summaryLabel": "Résumé",
+  "invitedEmailLabel": "Email invité",
+  "statusLabel": "Statut",
+  "accountLabel": "Compte",
+  "contractLabel": "Contrat",
+  "statusValue": "Invitation refusée",
+  "accountCreatedValue": "Compte créé sans contrat",
+  "accountNotCreatedValue": "Aucun compte créé",
+  "contractValue": "Aucun contrat créé",
+  "accountCreatedNote": "Le formulaire a été soumis avec refus coché. Un compte a pu être créé, mais aucun contrat n’a été créé.",
+  "accountNotCreatedNote": "L’invitation a été refusée sans création de compte et sans création de contrat.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Fondateur · FitDesk"
+}

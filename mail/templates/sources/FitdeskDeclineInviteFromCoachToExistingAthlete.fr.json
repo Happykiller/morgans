@@ -1,0 +1,16 @@
+{
+  "preview": "{{ athleteName }} a refusé ton invitation FitDesk.",
+  "badge": "Invitation refusée",
+  "headingPrefix": "INVITATION",
+  "headingAccent": "REFUSÉE",
+  "intro": "{{ athleteName }} a refusé l’invitation envoyée depuis FitDesk. Aucun contrat n’a été créé.",
+  "summaryLabel": "Résumé",
+  "athleteLabel": "Athlète concerné",
+  "statusLabel": "Statut",
+  "contractLabel": "Contrat",
+  "statusValue": "Invitation refusée",
+  "contractValue": "Aucun contrat créé",
+  "note": "Cette notification est informative. Elle confirme simplement la réponse de l’athlète, dans un cadre clair et sans autre action requise.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Fondateur · FitDesk"
+}

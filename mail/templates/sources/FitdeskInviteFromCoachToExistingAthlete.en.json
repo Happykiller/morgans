@@ -1,0 +1,19 @@
+{
+  "preview": "{{ coachName }} invited you to join on FitDesk.",
+  "badge": "Coach invitation",
+  "headingPrefix": "JOIN",
+  "headingAccent": "YOUR COACH",
+  "intro": "{{ coachName }} is inviting you to join as an athlete on FitDesk. You can respond to this invitation using the secure link below, with a simple and smooth experience.",
+  "coachCardLabel": "Invitation received",
+  "coachIdentityLabel": "Inviting coach",
+  "responseMethodLabel": "Response",
+  "validityLabel": "Link validity",
+  "responseMethodValue": "Using a secure link",
+  "validityValue": "7 days",
+  "inspiration": "The best progress often starts with clear structure and the right coach by your side.",
+  "cta": "RESPOND TO INVITATION",
+  "fallbackLabel": "Invitation link",
+  "fallbackNote": "If the button does not display correctly, copy and paste the link above into your browser. This link remains valid for 7 days.",
+  "signatureName": "Alexandre",
+  "signatureRole": "Founder · FitDesk"
+}

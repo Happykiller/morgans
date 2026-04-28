@@ -11,20 +11,39 @@ from typing import Any
 LOGGER_NAME = "morgans"
 
 
+_STRUCTURED_FIELDS = ("event", "recipient", "subject", "template", "status", "detail")
+_FIELD_DEFAULTS = {f: "-" for f in _STRUCTURED_FIELDS}
+
+
+class _StructuredFormatter(logging.Formatter):
+    """Formatter that fills in missing structured fields for third-party loggers."""
+
+    def format(self, record: logging.LogRecord) -> str:
+        for key, default in _FIELD_DEFAULTS.items():
+            if not hasattr(record, key):
+                setattr(record, key, default)
+        return super().format(record)
+
+
 def configure_logging(log_level: str) -> None:
     """Configure root logging with a stable, machine-readable format."""
     numeric_level = getattr(logging, log_level.upper(), logging.INFO)
 
-    logging.basicConfig(
-        level=numeric_level,
-        format=(
+    fmt = _StructuredFormatter(
+        fmt=(
             "%(asctime)sZ level=%(levelname)s logger=%(name)s "
             "event=%(event)s recipient=%(recipient)s subject=%(subject)s "
             "template=%(template)s status=%(status)s detail=%(detail)s"
         ),
         datefmt="%Y-%m-%dT%H:%M:%S",
-        force=True,
     )
+    handler = logging.StreamHandler()
+    handler.setFormatter(fmt)
+
+    root = logging.getLogger()
+    root.setLevel(numeric_level)
+    root.handlers.clear()
+    root.addHandler(handler)
 
 
 class SafeExtraAdapter(logging.LoggerAdapter):

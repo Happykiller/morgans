@@ -1,4 +1,6 @@
 # schema/mutations.py
+import uuid
+
 import strawberry
 
 from logging_utils import get_logger
@@ -6,6 +8,7 @@ from logging_utils import utc_timestamp
 from mail.smtp import normalize_template_name
 from mail.smtp import send_email
 from mail.smtp import send_email_with_template
+from schema.bulk_types import BulkJobResponse
 from schema.types import MailInput
 from schema.types import MailResponse
 from schema.types import MailTemplateInput
@@ -120,3 +123,31 @@ class Mutation:
             },
         )
         return MailResponse(success=True, message="Email sent with template")
+
+    @strawberry.mutation
+    async def create_bulk_job(
+        self,
+        info: strawberry.types.Info,
+        csv_file: str,
+        template: str,
+        subject: str,
+    ) -> BulkJobResponse:
+        """Enqueue a bulk email job from a CSV file already present in BULK_CSV_DIR."""
+        arq_pool = info.context["arq_pool"]
+        job_id = str(uuid.uuid4())
+
+        await arq_pool.enqueue_job("bulk_send_job", csv_file, template, subject, job_id)
+
+        logger.info(
+            "bulk_job_enqueued",
+            extra={
+                "event": "bulk_job_enqueued",
+                "recipient": "-",
+                "subject": subject[:80],
+                "template": template,
+                "status": "enqueued",
+                "detail": f"job_id={job_id} csv={csv_file}",
+            },
+        )
+
+        return BulkJobResponse(job_id=job_id)

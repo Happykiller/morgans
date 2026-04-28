@@ -20,5 +20,10 @@ class Settings(BaseSettings):
     MAIL_FROM: Optional[str] = None
     LOG_LEVEL: str = "INFO"
 
+    REDIS_URL: str = "redis://localhost:6379"
+    SMTP_RATE_PER_HOUR: int = 200
+    SMTP_CONCURRENCY: int = 10
+    BULK_CSV_DIR: str = "/app/bulk"
+
 
 settings = Settings()

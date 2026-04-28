@@ -4,7 +4,8 @@
       "Bash(ls:*)",
       "Bash(ln -s AGENTS.md CLAUDE.md)",
       "Bash(ln -s AGENTS.md GEMINI.md)",
-      "Bash(ln -s AGENTS.md CODEX.md)"
+      "Bash(ln -s AGENTS.md CODEX.md)",
+      "Bash(docker inspect pudding-redis *)"
     ]
   }
 }

@@ -1,0 +1,26 @@
+### ping
+POST http://localhost:8025/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+  ping
+}
+
+### system
+POST http://localhost:8025/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+  system {
+    version
+    smtpHost
+    smtpPort
+    smtpUser
+    mailFrom
+    smtpTls
+    redisUrl
+    redisAvailable
+  }
+}

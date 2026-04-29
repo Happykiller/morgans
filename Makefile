@@ -19,12 +19,12 @@ help:
 	@echo "🔧 install             Installer les dépendances Python avec Poetry"
 	@echo "🚀 dev                 Lancer FastAPI en local avec .env.dev"
 	@echo ""
-	@echo "🧪 dev-up              Lancer le conteneur morgans-dev (volume + hot reload)"
-	@echo "🔁 dev-up-build        Rebuild + up du conteneur morgans-dev"
+	@echo "🧪 dev-up              Lancer la stack dev (API + worker)"
+	@echo "🔁 dev-up-build        Rebuild + up de la stack dev (API + worker)"
 	@echo "💻 dev-shell           Shell dans le conteneur dev"
 	@echo ""
 	@echo "🐳 morgans             Démarrer la stack prod (docker-compose.prod.yml)"
-	@echo "🐳 morgans-build       Recréer et démarrer la stack prod"
+	@echo "🐳 morgans-build       Rebuild l'image locale puis redémarrer la stack prod"
 	@echo "🧹 morgans-clean       Supprimer l'image locale"
 	@echo "📜 logs                Logs du conteneur"
 	@echo "🛑 down                Stopper tous les conteneurs"
@@ -52,11 +52,12 @@ dev:
 	set -a; . ./.env.dev; set +a; poetry run uvicorn main:app --reload --port 8000
 
 dev-up:
-	$(COMPOSE_DEV) up morgans-dev
+	$(COMPOSE_DEV) up morgans-dev morgans-worker
 
 dev-up-build:
 	docker rm -f morgans-dev || true
-	$(COMPOSE_DEV) up --build morgans-dev
+	docker rm -f morgans-worker || true
+	$(COMPOSE_DEV) up --build morgans-dev morgans-worker
 
 dev-shell:
 	$(COMPOSE_DEV) exec morgans-dev /bin/bash
@@ -90,7 +91,8 @@ morgans:
 	$(COMPOSE_PROD) up -d
 
 morgans-build:
-	$(COMPOSE_PROD) up --build -d
+	docker build -t morgans -f Dockerfile .
+	$(COMPOSE_PROD) up -d
 
 morgans-clean:
 	docker rmi morgans || true
@@ -117,7 +119,7 @@ status:
 	@docker images morgans --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 
 version:
-	./scripts/version.sh
+	bash ./scripts/version.sh
 
 ## 🧪 TEST & OUTILS
 
@@ -130,7 +132,7 @@ render-template:
 	docker compose exec morgans-dev bash -c "cd mail/templates && npx tsx render.ts $(name)"
 
 test-send:
-	./scripts/test-send.sh
+	bash ./scripts/test-send.sh
 
 test-template-send:
 	python3 ./scripts/test-template-send.py

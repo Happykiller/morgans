@@ -18,9 +18,13 @@ class BulkJobError:
 class BulkJobStatus:
     id: str
     status: str
+    csv_file: Optional[str]
+    template: Optional[str]
+    subject: Optional[str]
     total: int
     sent: int
     failed: int
     errors: list[BulkJobError]
+    queued_at: Optional[str]
     started_at: Optional[str]
     completed_at: Optional[str]

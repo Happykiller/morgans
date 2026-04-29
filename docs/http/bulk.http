@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:8025
+
+### createBulkJob
+POST {{baseUrl}}/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation CreateBulkJob($csvFile: String!, $template: String!, $subject: String!) { createBulkJob(csvFile: $csvFile, template: $template, subject: $subject) { jobId } }",
+  "variables": {
+    "csvFile": "fitdesk-invitations-bulk-test.csv",
+    "template": "fitdeskinvitefromcoachtonoexistingathlete.fr.html",
+    "subject": "\u007b\u007b coachName \u007d\u007d t'invite a rejoindre FitDesk"
+  }
+}
+
+### bulkJob
+POST {{baseUrl}}/graphql
+Content-Type: application/json
+
+{
+  "query": "query BulkJob($id: String!) { bulkJob(id: $id) { id status csvFile template subject total sent failed queuedAt startedAt completedAt errors { email error } } }",
+  "variables": {
+    "id": "2d5588a1-2cb7-4197-b093-1d8aa60e006b"
+  }
+}
+
+### bulkJobsInProgress
+POST {{baseUrl}}/graphql
+Content-Type: application/json
+
+{
+  "query": "query BulkJobsInProgress($limit: Int!) { bulkJobsInProgress(limit: $limit) { id status csvFile template subject total sent failed queuedAt startedAt completedAt } }",
+  "variables": {
+    "limit": 20
+  }
+}
+
+### bulkJobs
+POST {{baseUrl}}/graphql
+Content-Type: application/json
+
+{
+  "query": "query BulkJobs($limit: Int!) { bulkJobs(limit: $limit) { id status csvFile template subject total sent failed queuedAt startedAt completedAt } }",
+  "variables": {
+    "limit": 20
+  }
+}

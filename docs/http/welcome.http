@@ -1,0 +1,75 @@
+### sendMailWithTemplate Welcome
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "fabrice.rosito@gmail.com",
+      "subject": "Bienvenue sur Vergo",
+      "template": "welcome.html",
+      "variables": {
+        "id": "Fabrice",
+        "email": "fabrice.rosito@gmail.com",
+        "password": "super-secret",
+        "logoUrl": "https://vergo.happykiller.net/favicon-192x192.png",
+        "serviceUrl": "https://vergo.happykiller.net/",
+        "serviceName": "Vergo",
+        "siguriUrl": "https://siguri.happykiller.net/"
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate Test
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "f.rosito@thomyris.com",
+      "subject": "Bienvenue sur Vergo",
+      "template": "test.html",
+      "variables": {}
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Coach
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "thomas.things@gmail.com",
+      "subject": "Bienvenue sur FitDesk, Thomas.",
+      "template": "fitdeskwelcomecoach.fr.html",
+      "variables": {
+        "firstName": "Thomas"
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Athlete
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "thomas.things@gmail.com",
+      "subject": "Bienvenue sur FitDesk, Thomas.",
+      "template": "fitdeskwelcomeathlete.fr.html",
+      "variables": {
+        "firstName": "Thomas"
+      }
+    }
+  }
+}

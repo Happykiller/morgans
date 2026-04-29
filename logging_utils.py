@@ -22,7 +22,20 @@ class _StructuredFormatter(logging.Formatter):
         for key, default in _FIELD_DEFAULTS.items():
             if not hasattr(record, key):
                 setattr(record, key, default)
-        return super().format(record)
+        base = super().format(record)
+        compact = []
+        for token in base.split():
+            if token in {
+                "event=-",
+                "recipient=-",
+                "subject=-",
+                "template=-",
+                "status=-",
+                "detail=-",
+            }:
+                continue
+            compact.append(token)
+        return " ".join(compact)
 
 
 def configure_logging(log_level: str) -> None:

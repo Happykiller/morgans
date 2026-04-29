@@ -79,6 +79,18 @@ SMTP_TLS=false
 MAIL_FROM=you@example.com
 ```
 
+Variables bulk/worker si Redis est activé:
+
+```dotenv
+REDIS_URL=redis://localhost:6379
+SMTP_THROTTLE_MAX_ITERATIONS=200
+SMTP_THROTTLE_WINDOW_MINUTES=60
+BULK_CSV_DIR=/app/bulk
+```
+
+En Docker dev, les conteneurs chargent `.env` puis `.env.dev`.
+Les valeurs de `.env.dev` surchargent donc celles de `.env`.
+
 ### 3) Lancer en développement
 
 ```bash
@@ -86,6 +98,25 @@ make dev-up
 ```
 
 Accès API GraphQL: [http://localhost:8025/graphql](http://localhost:8025/graphql)
+
+La stack de developpement Docker lance:
+
+- `morgans-dev`
+- `morgans-worker`
+
+Redis est traite comme un service tiers: `make dev-up` n'en lance pas.
+Le bulk fonctionne seulement si `REDIS_URL` pointe vers un Redis joignable depuis les conteneurs.
+En dev, le dossier local `bulk/` est monte directement dans `/app/bulk`.
+
+Développement local sans Redis:
+
+```bash
+make dev
+```
+
+Sans Redis, l'API démarre en mode dégradé:
+- `sendMail` et `sendMailWithTemplate` restent disponibles
+- `createBulkJob` et `bulkJob` renvoient une erreur explicite tant que Redis n'est pas joignable
 
 ### 4) Lancer en production (compose prod)
 
@@ -100,6 +131,12 @@ Puis démarrer:
 ```bash
 make morgans
 ```
+
+La stack production lance:
+- l'API GraphQL `morgans`
+- le worker `morgans-worker` pour les jobs bulk
+
+Les deux services partagent le volume `/app/bulk`.
 
 ---
 
@@ -166,9 +203,183 @@ query {
     mailFrom
     smtpTls
     version
+    redisUrl
+    redisAvailable
   }
 }
 ```
+
+`redisAvailable` permet de verifier si l'API arrive effectivement a joindre Redis au moment de l'appel.
+
+### Bulk et Redis
+
+Les opérations bulk dépendent de Redis et du worker ARQ:
+
+- mutation `createBulkJob`
+- query `bulkJob`
+- query `bulkJobsInProgress`
+- query `bulkJobs`
+
+Si Redis n'est pas configuré ou indisponible, ces opérations échouent proprement, mais les envois unitaires continuent de fonctionner.
+Le job est visible des l'enqueue avec le statut `queued`, avant passage en `running`.
+
+Le fichier CSV doit deja etre present dans `BULK_CSV_DIR` (par defaut `/app/bulk`) et contenir:
+
+- une colonne `email`
+- une colonne par variable de template
+
+Exemple de CSV:
+
+```csv
+email,firstName,coachName,invitationUrl
+alice@example.com,Alice,Thomas Martin,https://app.fitdesk.io/invitations/public/token-a
+bob@example.com,Bob,Sarah Leroy,https://app.fitdesk.io/invitations/public/token-b
+```
+
+### Mutation `createBulkJob`
+
+```graphql
+mutation CreateBulkJob($csvFile: String!, $template: String!, $subject: String!) {
+  createBulkJob(csvFile: $csvFile, template: $template, subject: $subject) {
+    jobId
+  }
+}
+```
+
+Variables:
+
+```json
+{
+  "csvFile": "fitdesk/invitations-2026-04-29.csv",
+  "template": "fitdeskinvitefromcoachtonoexistingathlete.fr.html",
+  "subject": "{{ coachName }} t'invite a rejoindre FitDesk"
+}
+```
+
+Le champ `subject` supporte aussi les variables Jinja2 du CSV ou du payload de template.
+Exemple: `{{ coachName }} t'invite a rejoindre FitDesk`.
+
+Pour un throttling plus flexible, tu peux definir:
+
+- `SMTP_THROTTLE_MAX_ITERATIONS`
+- `SMTP_THROTTLE_WINDOW_MINUTES`
+
+Exemple:
+
+```dotenv
+SMTP_THROTTLE_MAX_ITERATIONS=15
+SMTP_THROTTLE_WINDOW_MINUTES=1
+```
+
+Cela limite le worker a 15 envois sur une fenetre de 1 minute.
+Les envois sont repartis de facon lisse sur la fenetre, avec un leger jitter pour eviter un pattern trop mecanique.
+
+Ces deux variables constituent maintenant l'unique mecanisme de throttling du worker.
+Exemple equivalent a l'ancien comportement "200 par heure":
+
+```dotenv
+SMTP_THROTTLE_MAX_ITERATIONS=200
+SMTP_THROTTLE_WINDOW_MINUTES=60
+```
+
+### Query `bulkJob`
+
+```graphql
+query BulkJob($id: String!) {
+  bulkJob(id: $id) {
+    id
+    status
+    csvFile
+    template
+    subject
+    total
+    sent
+    failed
+    queuedAt
+    startedAt
+    completedAt
+    errors {
+      email
+      error
+    }
+  }
+}
+```
+
+### Query `bulkJobsInProgress`
+
+```graphql
+query BulkJobsInProgress($limit: Int!) {
+  bulkJobsInProgress(limit: $limit) {
+    id
+    status
+    csvFile
+    template
+    subject
+    total
+    sent
+    failed
+    queuedAt
+    startedAt
+    completedAt
+  }
+}
+```
+
+Variables:
+
+```json
+{
+  "limit": 20
+}
+```
+
+Cette query renvoie les jobs bulk actuellement en `queued` ou `running`.
+
+### Query `bulkJobs`
+
+```graphql
+query BulkJobs($limit: Int!) {
+  bulkJobs(limit: $limit) {
+    id
+    status
+    csvFile
+    template
+    subject
+    total
+    sent
+    failed
+    queuedAt
+    startedAt
+    completedAt
+  }
+}
+```
+
+Variables:
+
+```json
+{
+  "limit": 20
+}
+```
+
+Cette query renvoie les jobs bulk recents, tous statuts confondus.
+
+Variables:
+
+```json
+{
+  "id": "replace-with-job-id"
+}
+```
+
+Statuts observes:
+
+- `running`
+- `completed`
+- `partial_failure`
+- `failed`
 
 ---
 
@@ -184,7 +395,7 @@ Référence technique des templates (catalogue + paramètres supportés):
 
 Scénarios de test HTTP prêts à exécuter (GraphQL):
 
-- `docs/req.http`
+- `docs/http/`
 
 Outil interactif pour tester l'envoi d'un template:
 
@@ -256,7 +467,7 @@ make help            # liste complète
 make dev             # lancement local uvicorn avec .env.dev
 make dev-up          # stack dev (docker compose)
 make logs            # logs du conteneur
-make test-send       # test d'envoi via mutation GraphQL
+MORGANS_TEST_RECIPIENT=mailcatcher@example.test make test-send
 make version         # version exposée par l'API
 ```
 

@@ -1,0 +1,91 @@
+### sendMailWithTemplate FitDesk Plan Upgrade - trial -> starter
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "thomas.things@gmail.com",
+      "subject": "Ton abonnement Starter est actif",
+      "template": "fitdeskplanupgrade.fr.html",
+      "variables": {
+        "firstName": "Thomas",
+        "previousPlan": "trial",
+        "newPlan": "starter",
+        "previousClientLimit": "0",
+        "newClientLimit": "5",
+        "ctaUrl": "https://app.fitdesk.io"
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Plan Upgrade - starter -> premium
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "thomas.things@gmail.com",
+      "subject": "Passage Premium confirme",
+      "template": "fitdeskplanupgrade.fr.html",
+      "variables": {
+        "firstName": "Thomas",
+        "previousPlan": "starter",
+        "newPlan": "premium",
+        "previousClientLimit": "5",
+        "newClientLimit": "inf",
+        "ctaUrl": "https://app.fitdesk.io"
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Plan Upgrade - pro -> premium
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "thomas.things@gmail.com",
+      "subject": "Tu passes en Premium",
+      "template": "fitdeskplanupgrade.fr.html",
+      "variables": {
+        "firstName": "Thomas",
+        "previousPlan": "pro",
+        "newPlan": "premium",
+        "previousClientLimit": "15",
+        "newClientLimit": "inf",
+        "ctaUrl": "https://app.fitdesk.io"
+      }
+    }
+  }
+}
+
+### sendMailWithTemplate FitDesk Plan Downgrade - pro -> starter
+POST http://localhost:8025/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation sendMailWithTemplate($input: MailTemplateInput!) { sendMailWithTemplate(input: $input) { success message } }",
+  "variables": {
+    "input": {
+      "to": "thomas.things@gmail.com",
+      "subject": "Changement de formule actif",
+      "template": "fitdeskplandowngrade.fr.html",
+      "variables": {
+        "firstName": "Thomas",
+        "previousPlan": "pro",
+        "newPlan": "starter",
+        "previousClientLimit": "15",
+        "newClientLimit": "5",
+        "ctaUrl": "https://app.fitdesk.io"
+      }
+    }
+  }
+}

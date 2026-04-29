@@ -15,6 +15,14 @@ from schema.types import MailTemplateInput
 
 
 logger = get_logger("morgans.graphql.mutations")
+_JOB_TTL = 7 * 24 * 3600
+_BULK_JOBS_SET = "bulk:jobs"
+_BULK_ACTIVE_JOBS_SET = "bulk:jobs:active"
+
+
+def require_arq_pool(arq_pool) -> None:
+    if arq_pool is None:
+        raise RuntimeError("Bulk jobs are unavailable: Redis is not configured or unreachable.")
 
 
 @strawberry.type
@@ -134,8 +142,29 @@ class Mutation:
     ) -> BulkJobResponse:
         """Enqueue a bulk email job from a CSV file already present in BULK_CSV_DIR."""
         arq_pool = info.context["arq_pool"]
+        require_arq_pool(arq_pool)
         job_id = str(uuid.uuid4())
+        queued_at = utc_timestamp()
 
+        await arq_pool.hset(
+            f"job:{job_id}",
+            mapping={
+                "status": "queued",
+                "csv_file": csv_file,
+                "template": template,
+                "subject": subject,
+                "total": 0,
+                "sent": 0,
+                "failed": 0,
+                "errors": "[]",
+                "queued_at": queued_at,
+            },
+        )
+        await arq_pool.expire(f"job:{job_id}", _JOB_TTL)
+        await arq_pool.sadd(_BULK_JOBS_SET, job_id)
+        await arq_pool.sadd(_BULK_ACTIVE_JOBS_SET, job_id)
+        await arq_pool.expire(_BULK_JOBS_SET, _JOB_TTL)
+        await arq_pool.expire(_BULK_ACTIVE_JOBS_SET, _JOB_TTL)
         await arq_pool.enqueue_job("bulk_send_job", csv_file, template, subject, job_id)
 
         logger.info(

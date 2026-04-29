@@ -143,4 +143,4 @@ Use `fitdeskplandowngrade.*.html` for:
 
 ## Test samples
 
-Concrete GraphQL examples are available in `docs/req.http` for all plan-change scenarios.
+Concrete GraphQL examples are available in `docs/http/fitdesk-plan.http` for all plan-change scenarios.

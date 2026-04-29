@@ -6,8 +6,25 @@ services:
     restart: always
     env_file:
       - .env
+    volumes:
+      - morgans-bulk:/app/bulk
     networks:
       - interservices
+
+  morgans-worker:
+    image: morgans
+    container_name: morgans-worker
+    restart: always
+    command: ["python", "-m", "arq", "worker.WorkerSettings"]
+    env_file:
+      - .env
+    volumes:
+      - morgans-bulk:/app/bulk
+    networks:
+      - interservices
+
+volumes:
+  morgans-bulk:
 
 networks:
   interservices:

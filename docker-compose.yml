@@ -6,9 +6,8 @@ services:
     ports:
       - "8025:8000"
     env_file:
+      - .env
       - .env.dev
-    networks:
-      - pudding_default
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -20,14 +19,13 @@ services:
     ports:
       - "8025:8000"
     env_file:
+      - .env
       - .env.dev
-    networks:
-      - pudding_default
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
       - .:/app
-      - morgans-bulk:/app/bulk
+      - ./bulk:/app/bulk
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
   morgans-worker:
@@ -36,19 +34,11 @@ services:
       dockerfile: Dockerfile
     container_name: morgans-worker
     env_file:
+      - .env
       - .env.dev
-    networks:
-      - pudding_default
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
       - .:/app
-      - morgans-bulk:/app/bulk
+      - ./bulk:/app/bulk
     command: ["python", "-m", "arq", "worker.WorkerSettings"]
-
-volumes:
-  morgans-bulk:
-
-networks:
-  pudding_default:
-    external: true

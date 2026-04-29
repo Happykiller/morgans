@@ -51,6 +51,11 @@ def resolve_template_name(template_name: str) -> str:
     raise FileNotFoundError(f"Template '{template_name}' not found.")
 
 
+def render_subject(subject_template: str, variables: dict) -> str:
+    """Render a subject string with the same variable context as the body."""
+    return template_env.from_string(subject_template).render(**variables)
+
+
 async def send_email_with_template(
     to: str,
     subject: str,
@@ -59,14 +64,15 @@ async def send_email_with_template(
 ):
     """Render and send an email from an HTML template."""
     resolved_template_name = resolve_template_name(template_name)
+    rendered_subject = render_subject(subject, variables)
 
     if resolved_template_name != template_name:
-        logger.info(
+        logger.debug(
             "template_alias_normalized",
             extra={
                 "event": "template_alias_normalized",
                 "recipient": to,
-                "subject": subject[:80],
+                "subject": "-",
                 "template": resolved_template_name,
                 "status": "normalized",
                 "detail": f"requested={template_name}",
@@ -78,7 +84,7 @@ async def send_email_with_template(
 
     await send_email(
         to=to,
-        subject=subject,
+        subject=rendered_subject,
         body=rendered_body,
         html=True,
         template_name=resolved_template_name,
@@ -117,20 +123,6 @@ async def send_email(
     if settings.SMTP_PASSWORD:
         send_args["password"] = settings.SMTP_PASSWORD
 
-    subject_prefix = subject[:80]
-
-    logger.info(
-        "smtp_send_started",
-        extra={
-            "event": "smtp_send_started",
-            "recipient": to,
-            "subject": subject_prefix,
-            "template": template_name or "raw",
-            "status": "started",
-            "detail": f"html={html}",
-        },
-    )
-
     try:
         await aiosmtplib.send(msg, **send_args)
     except Exception as error:
@@ -139,7 +131,7 @@ async def send_email(
             extra={
                 "event": "smtp_send_failed",
                 "recipient": to,
-                "subject": subject_prefix,
+                "subject": "-",
                 "template": template_name or "raw",
                 "status": "failed",
                 "detail": type(error).__name__,
@@ -147,12 +139,12 @@ async def send_email(
         )
         raise
 
-    logger.info(
+    logger.debug(
         "smtp_send_succeeded",
         extra={
             "event": "smtp_send_succeeded",
             "recipient": to,
-            "subject": subject_prefix,
+            "subject": "-",
             "template": template_name or "raw",
             "status": "succeeded",
             "detail": "delivered_to_smtp",
